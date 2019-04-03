@@ -6,6 +6,7 @@
 
 [patchwork](https://github.com/aubera/patchwork.git)
 
+[And this is my very first website ever. Ta-da-da-daaa! ;)q](https://aubera.github.io/)
 
 # This is our syllabus
 
