@@ -11,6 +11,4 @@
 //  31
 //  1.87
 
-console.log('Andor Auber');
-console.log(30);
-console.log(1.93);
+console.log('Andor Auber \n' + 30 + '\n' + 1.93);
