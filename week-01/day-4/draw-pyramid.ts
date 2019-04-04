@@ -1,6 +1,12 @@
 'use strict';
 
 let lineCount: number = 4;
+let otherLineCount: number = lineCount;
+let spaceBase: string = '';
+let spaceElement: string = ' ';
+let starElement: string = '*';
+let actualLine: string = '';
+let starCount: number = 1;
 
 // Write a program that draws a
 // pyramid like this:
@@ -12,11 +18,23 @@ let lineCount: number = 4;
 //
 // The pyramid should have as many lines as lineCount is
 
-function spaceRepeater (base: string, element: string, repeat: number) {
+function repeater (base: string, element: string, repeat: number) {
   for (let i: number = 1; i <= repeat; i++) {
     base += element;
   }
-  console.log(base);
+  return(base);
 }
 
-spaceRepeater('','.',3);
+// let something: string = '';
+// something = repeater('','.',3);
+// console.log(valami);
+
+
+for (let i: number = 1; i <= lineCount; i++) {
+  actualLine = repeater(spaceBase, spaceElement, otherLineCount-1);
+  actualLine += repeater(spaceBase, starElement, starCount);
+  actualLine += repeater(spaceBase, spaceElement, otherLineCount-1);
+  otherLineCount--;
+  starCount += 2;
+  console.log(actualLine);
+}
