@@ -27,7 +27,6 @@ function repeater(base: string, element: string, repeat: number) {
 for (lineCount; lineCount >= 1;  lineCount--) {
   actualLine = repeater(spaceBase, spaceElement, lineCount - 1);
   actualLine += repeater(spaceBase, starElement, starCount);
-  actualLine += repeater(spaceBase, spaceElement, lineCount - 1);
   starCount += 2;
   console.log(actualLine);
 }
