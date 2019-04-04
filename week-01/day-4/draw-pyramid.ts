@@ -24,11 +24,6 @@ function repeater (base: string, element: string, repeat: number) {
   return(base);
 }
 
-// let something: string = '';
-// something = repeater('','.',3);
-// console.log(valami);
-
-
 for (lineCount; lineCount >= 1; lineCount--) {
   actualLine = repeater(spaceBase, spaceElement, lineCount-1);
   actualLine += repeater(spaceBase, starElement, starCount);
