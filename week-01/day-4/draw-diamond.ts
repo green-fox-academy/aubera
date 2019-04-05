@@ -1,12 +1,11 @@
 'use strict';
 
-let lineCount: number = 7;
+let lineCount: number = 4;
 let spaceBase: string = '';
 let spaceElement: string = ' ';
 let starElement: string = '*';
 let actualLine: string = '';
 let starCount: number = 1;
-
 // Write a program that draws a
 // diamond like this:
 //
