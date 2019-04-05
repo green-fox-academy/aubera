@@ -1,7 +1,6 @@
 'use strict';
 
 let lineCount: number = 7;
-let spaceCount: number = Math.floor(lineCount / 2);
 let spaceBase: string = '';
 let spaceElement: string = ' ';
 let starElement: string = '*';
@@ -28,17 +27,26 @@ function repeater(base: string, element: string, repeat: number) {
   return (base);
 }
 
-for (lineCount; lineCount >= 1; lineCount--) {
-  if (lineCount >= 4) {
-    actualLine = repeater(spaceBase, spaceElement, lineCount - 4);
+for (let i: number = Math.round(lineCount/2); i >= 1; i--) {
+  actualLine = repeater(spaceBase, spaceElement, i - 1);
+  actualLine += repeater(spaceBase, starElement, starCount);
+  starCount += 2;
+  console.log(actualLine);
+}
+if (lineCount % 2){
+  starCount -= 4;
+  for (let j: number = 0; j < Math.floor(lineCount / 2); j++){
+    actualLine = repeater(spaceBase, spaceElement, j + 1);
     actualLine += repeater(spaceBase, starElement, starCount);
-    starCount += 2;
-    console.log(actualLine);
-  } else {
-    actualLine = repeater(spaceBase, spaceElement, spaceCount - 2);
-    actualLine += repeater(spaceBase, starElement, starCount - 4);
     starCount -= 2;
-    spaceCount += 1;
+    console.log(actualLine);
+  }
+} else {
+  starCount -= 2;
+  for (let k: number = 0; k < Math.floor(lineCount / 2); k++){
+    actualLine = repeater(spaceBase, spaceElement, k);
+    actualLine += repeater(spaceBase, starElement, starCount);
+    starCount -= 2;
     console.log(actualLine);
   }
 }
