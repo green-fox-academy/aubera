@@ -6,11 +6,11 @@
 function unique(arr: number[]) {
   let uniqueArray: number[] = [];
   uniqueArray.push(arr[0]);
-  for (let i: number = 1; i < arr.length; i++) {
-    if (uniqueArray.indexOf(arr[i]) === -1) {
-      uniqueArray.push(arr[i]);
+  arr.forEach(element => {
+    if (uniqueArray.indexOf(element) === -1) {
+      uniqueArray.push(element);
     }
-  }
+  });
   return uniqueArray;
 }
 
