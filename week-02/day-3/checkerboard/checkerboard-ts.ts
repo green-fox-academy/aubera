@@ -15,7 +15,7 @@ function squareDrawer(x: number, y: number, z: number, w: number) {
 
 let posX: number = 0;
 let posY: number = 0;
-let size: number = 20;
+let size: number = 100;
 function checkerboard() {
   for (let i: number = 1; i <= (400 / size); i++) {
     if (i % 2) {
