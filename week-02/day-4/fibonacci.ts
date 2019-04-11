@@ -9,10 +9,13 @@
 // with n=0 representing the start of the sequence.
 
 function fibonacci(n: number): number {
-  if (n === 0 || n === 1) {
+  if (n === 0) {
+    return 0;
+  }
+  if (n === 1) {
     return 1;
   }
-  return n + fibonacci(n - 1);
+  return n = fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-console.log(fibonacci(0));
+console.log(fibonacci(8));
