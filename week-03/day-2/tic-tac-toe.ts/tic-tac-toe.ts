@@ -9,9 +9,6 @@ function ticTacResult(path: string){
   let content: string = fs.readFileSync(path, 'utf-8');
   let contentByRow: string[] = content.split('\n');
   let contentBySpace: string[][] = [];
-  // let res1: string;
-  // let res2: string;
-  // let res3: string;
   for (let j: number = 0; j < contentByRow.length; j++){
     contentBySpace.push(contentByRow[j].split(''));
   }
