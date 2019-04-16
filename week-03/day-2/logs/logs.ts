@@ -7,33 +7,33 @@ const fs = require('fs');
 
 const logContent = fs.readFileSync('log.txt', 'utf-8');
 
-function uniqueIPAdresses (log: string):any{
+function uniqueIPAdresses(log: string): any {
   let uniques: string[] = [];
-  let separateByRow: string[] = logContent.split('\n');
+  let separateByRow: string[] = log.split('\n');
   let separateBySpace: string[][] = [];
-  for(let i: number = 0; i < separateByRow.length; i++){
+  for (let i: number = 0; i < separateByRow.length; i++) {
     separateBySpace.push(separateByRow[i].split(' '));
-    if (uniques.indexOf(separateBySpace[i][8]) === -1){
+    if (uniques.indexOf(separateBySpace[i][8]) === -1) {
       uniques.push(separateBySpace[i][8]);
     }
   }
   return uniques.length;
 }
 
-function postGetRatio (log: string):any{
+function postGetRatio(log: string): any {
   let posts: number = 0;
   let gets: number = 0;
-  let separateByRow: string[] = logContent.split('\n');
+  let separateByRow: string[] = log.split('\n');
   let separateBySpace: string[][] = [];
-  for(let i: number = 0; i < separateByRow.length; i++){
+  for (let i: number = 0; i < separateByRow.length; i++) {
     separateBySpace.push(separateByRow[i].split(' '));
-    if (separateBySpace[i][11] === 'GET'){
+    if (separateBySpace[i][11] === 'GET') {
       gets++;
-    } else if (separateBySpace[i][11] === 'POST'){
+    } else if (separateBySpace[i][11] === 'POST') {
       posts++;
     }
   }
-  return gets/posts;
+  return gets / posts;
 }
 
 console.log('Unique IP addresses in the log file: ' + uniqueIPAdresses(logContent));
