@@ -25,7 +25,7 @@ print(dominoes);
 let snake: any[] = [];
 snake.push(dominoes[0].values);
 while (snake.length !== dominoes.length){
-  for (let i: number = 1; i < dominoes.length; i++){
+  for (let i: number = 0; i < dominoes.length; i++){
     if (dominoes[i].getLeftSide() === snake[snake.length-1][1]){
       snake.push(dominoes[i].values);
     }
