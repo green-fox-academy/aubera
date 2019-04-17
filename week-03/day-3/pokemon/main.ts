@@ -13,8 +13,10 @@ let wildPokemon: Pokemon = new Pokemon('Oddish', 'leaf', 'water');
 
 // Which pokemon should Ash use?
 function pokemonToChoose(list: Pokemon[]): any {
-  if (list[i].isEffectiveAgainst(wildPokemon)) {
-    return list[i].name;
+  for (let i: number = 0; i < list.length; i++){
+    if (list[i].isEffectiveAgainst(wildPokemon)) {
+      return list[i].name;
+    }
   }
 }
 
