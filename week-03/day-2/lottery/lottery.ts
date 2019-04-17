@@ -1,6 +1,5 @@
 'use strict';
 const fs = require('fs');
-var util = require('util');
 // Create a method that find the 5 most common lottery numbers in lottery.csv
 
 const data: string = fs.readFileSync('lottery.csv', 'utf-8');
