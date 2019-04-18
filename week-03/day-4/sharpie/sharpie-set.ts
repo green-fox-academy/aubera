@@ -8,13 +8,13 @@ class SharpieSet{
     this.sharpies = sharpies;
   }
 
-  countUsable(){
+  countUsable(): string {
     let counter: number = 0;
     this.sharpies.map(sharpie => sharpie.inkAmount !== 0 ? counter++ : '');
     return `The number of Sharpies still usable: ${counter}`;
   }
 
-  removeTrash(){
+  removeTrash(): string {
     this.sharpies = this.sharpies.filter(sharpie => sharpie.inkAmount !== 0);
     return `Total number of Sharpies still usable: ${this.sharpies.length}`;
   }
