@@ -4,9 +4,11 @@ export class Pirate {
   intoxicationLevel: number = 0;
   isDead: boolean = false;
   isPassedOut: boolean = false;
+  isCaptain: boolean = false;
 
   drinkSomeRum(numOfRum: number): void {
     !this.isDead ? this.intoxicationLevel += numOfRum : console.log("He's dead.");
+    this.intoxicationLevel > 4 ? this.isPassedOut = true : this.isPassedOut = false;
   }
 
   howsItGoingMate(): void {
