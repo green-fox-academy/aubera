@@ -1,7 +1,7 @@
 'use strict';
 import { Pirate } from './pirate'
 
-class Ship {
+export class Ship {
   crew: Pirate[] = [];
   maxCrewCapacity: number = 10;
   name: string;
@@ -66,14 +66,3 @@ class Ship {
     }
   }
 }
-
-let firstShip: Ship = new Ship('Black Pearl');
-let otherShip: Ship = new Ship('Jolly Roger')
-firstShip.fillShip();
-otherShip.fillShip();
-firstShip.status();
-otherShip.status();
-console.log('---------------');
-firstShip.battle(otherShip);
-firstShip.status();
-otherShip.status();
