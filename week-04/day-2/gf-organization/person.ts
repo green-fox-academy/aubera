@@ -1,18 +1,18 @@
 'use strict';
 
 export class Person{
-  name: srting;
+  name: string;
   age: number;
   gender: string;
 
-  constructor(name: string: 'Jane Dow', age: number = 30, gender: string = 'female'){
+  constructor(name: string = 'Jane Doe', age: number = 30, gender: string = 'female'){
     this.name = name;
     this.age = age;
     this.gender = gender;
   }
 
   introduce(): void{
-    console.log('Hi, I\'m name, a age year old gender.');
+    console.log(`Hi, I'm ${this.name}, a ${this.age} year old ${this.gender}.`);
   }
 
   getGoal(): void{
