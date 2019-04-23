@@ -19,5 +19,5 @@ export class BattleApp {
   }
 }
 
-let battleApp: BattleApp = new BattleApp();
-battleApp.battleApp();
+// let battleApp: BattleApp = new BattleApp();
+// battleApp.battleApp();
