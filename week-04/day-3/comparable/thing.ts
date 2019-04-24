@@ -1,10 +1,6 @@
 'use strict';
 
-interface Comparable {
-  compareTo(other: Comparable): number;
-  name: string;
-  completed: boolean;
-}
+import { Comparable } from './comparable'
 
 export class Thing implements Comparable {
   name: string;
@@ -26,7 +22,7 @@ export class Thing implements Comparable {
     return this.completed;
   }
 
-  compareTo(other: Comparable) {
+  compareTo(other: Thing): number {
     if (this.name < other.name) {
       return -1;
     }
