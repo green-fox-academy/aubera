@@ -6,7 +6,7 @@ interface Comparable {
   completed: boolean;
 }
 
-class Thing implements Comparable {
+export class Thing implements Comparable {
   name: string;
   completed: boolean = false;
 
@@ -27,27 +27,12 @@ class Thing implements Comparable {
   }
 
   compareTo(other: Comparable) {
-    if (this.completed < other.completed) {
+    if (this.name < other.name) {
       return -1;
     }
-    if (this.completed > other.completed) {
+    if (this.name > other.name) {
       return 1;
     }
     return 0;
   }
 }
-
-let things: Thing[] = [];
-things.push(new Thing('milk'));
-things.push(new Thing('bread'));
-things.push(new Thing('tea'));
-things.push(new Thing('cheese'));
-things.push(new Thing('butter'));
-things.push(new Thing('carrot'));
-
-things[1].complete();
-things[4].complete();
-
-console.log(things.sort(function(a: Thing, b: Thing): number {
-  return a.compareTo(b);
-}));
