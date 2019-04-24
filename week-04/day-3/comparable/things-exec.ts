@@ -29,3 +29,7 @@ things[1].complete();
 things[3].complete();
 
 console.log(sortByCompleted(things));
+
+for (let thing of things) {
+  thing.printAllFields();
+}
