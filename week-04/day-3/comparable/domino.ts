@@ -1,9 +1,6 @@
 'use strict';
 
-interface Comparable {
-  compareTo(other: Comparable): number;
-  values: number[];
-}
+import { Comparable } from './comparable'
 
 class Domino implements Comparable {
   values: number[];
