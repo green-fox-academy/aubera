@@ -1,8 +1,9 @@
 'use strict';
 
 import { Comparable } from './comparable'
+import { Printable } from '../printable/printable'
 
-export class Thing implements Comparable {
+export class Thing implements Comparable, Printable {
   name: string;
   completed: boolean = false;
 
@@ -30,5 +31,9 @@ export class Thing implements Comparable {
       return 1;
     }
     return 0;
+  }
+
+  printAllFields(): void{
+    console.log(this.name, this.completed);
   }
 }
