@@ -5,10 +5,9 @@
 const readLineSync = require('readline-sync');
 
 export class CowsAndBulls {
-  numberToGuess: number[] = [];
-  gameState: string = 'playing';
-  guessCounter: number = 0;
-  isUserInputValid: boolean = false;
+  private numberToGuess: number[] = [];
+  private gameState: string = 'playing';
+  private guessCounter: number = 0;
 
   constructor() {
     this.numberToGuess = this.generateNumberToGuess();
@@ -16,6 +15,7 @@ export class CowsAndBulls {
 
   generateNumberToGuess(): number[] {
     if (this.numberToGuess.length === 4) {
+      // console.log(this.numberToGuess);
       return this.numberToGuess;
     } else {
       let n: number = Math.round(Math.random() * 9);
@@ -28,7 +28,8 @@ export class CowsAndBulls {
 
   getUserInput(): number {
     let userInput: number = 0;
-    while (!this.isUserInputValid) {
+    let isUserInputValid: boolean = false;
+    while (!isUserInputValid) {
       try {
         userInput = readLineSync.question('Please give me a four digit number:  ');
         if (userInput.toString().length < 4) {
@@ -36,7 +37,7 @@ export class CowsAndBulls {
         } else if (userInput.toString().length > 4) {
           throw new Error("Too many digits!");
         } else {
-          this.isUserInputValid = true;
+          isUserInputValid = true;
         }
       } catch (error) {
         console.log(error.message);
@@ -44,8 +45,36 @@ export class CowsAndBulls {
     }
     return userInput;
   }
+
+  guess(num: number): void {
+    let guessArray: string[] = num.toString().split('');
+    let cows: number = 0;
+    let bulls: number = 0;
+    for (let i: number = 0; i < 4; i++) {
+      if (Number(guessArray[i]) === this.numberToGuess[i]) {
+        cows++;
+      } else if (this.numberToGuess.indexOf(Number(guessArray[i])) !== -1) {
+        bulls++;
+      }
+    }
+    console.log(`${cows} cow, ${bulls} bull`);
+    this.guessCounter++;
+    if (cows === 4) {
+      this.gameState = 'finished';
+      console.log(`You guessed it in ${this.guessCounter} trials.`)
+    } else {
+      this.gameState = 'playing';
+    }
+  }
+
+  game(): void {
+    while (this.gameState !== 'finished') {
+      let guessNumber = this.getUserInput();
+      this.guess(guessNumber);
+    }
+  }
 }
 
 let num: CowsAndBulls = new CowsAndBulls();
 // num.getUserInput();
-console.log(num.getUserInput());
+num.game();
