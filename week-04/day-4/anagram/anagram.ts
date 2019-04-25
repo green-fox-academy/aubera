@@ -1,6 +1,6 @@
 'use strict';
 
-function isAnagram (a: string, b: string): boolean{
+export function isAnagram (a: string, b: string): boolean{
   let ans: boolean = false;
   if (a.length === b. length){
     let bArray: string[] = b.split('');
