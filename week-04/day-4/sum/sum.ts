@@ -2,6 +2,11 @@
 
 export class Sum {
   getSum(items: number[]): number {
-    return items.reduce((a: number, b: number) => a + b);
+    try{
+      let ans: number = items.reduce((a: number, b: number) => a + b);
+      return ans
+    } catch(error){
+      return 0;
+    }
   }
 }
