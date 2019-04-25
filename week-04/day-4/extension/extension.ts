@@ -14,8 +14,23 @@ export function maxOfThree(a: number, b: number, c: number): number {
   }
 };
 
-export function median(pool: number[]): number {
-  return pool[Math.floor((pool.length - 1) / 2)];
+export function median(pool: number[]): number[] {
+  pool.sort((a: number, b: number) => {
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
+  });
+  if (pool.length % 2){
+    console.log(pool);
+    return [pool[Math.floor(pool.length / 2)]];
+  } else {
+    console.log(pool);
+    return [pool[Math.round(pool.length / 2) - 1], pool[Math.round(pool.length / 2)]];
+  }
 }
 
 export function isVowel(character: string): boolean {
