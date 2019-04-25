@@ -1,5 +1,3 @@
-
-
 'use strict';
 
 const readLineSync = require('readline-sync');
@@ -74,7 +72,3 @@ export class CowsAndBulls {
     }
   }
 }
-
-let num: CowsAndBulls = new CowsAndBulls();
-// num.getUserInput();
-num.game();
