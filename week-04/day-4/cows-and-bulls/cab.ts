@@ -31,9 +31,9 @@ export class CowsAndBulls {
       try {
         userInput = readLineSync.question('Please give me a four digit number:  ');
         if (userInput.toString().length < 4) {
-          throw new Error("Too few digits!");
+          throw new Error('Too few digits!');
         } else if (userInput.toString().length > 4) {
-          throw new Error("Too many digits!");
+          throw new Error('Too many digits!');
         } else {
           isUserInputValid = true;
         }
