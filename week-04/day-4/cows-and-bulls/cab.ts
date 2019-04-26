@@ -3,9 +3,9 @@
 const readLineSync = require('readline-sync');
 
 export class CowsAndBulls {
-  private numberToGuess: number[] = [];
-  private gameState: string = 'playing';
-  private guessCounter: number = 0;
+  public numberToGuess: number[] = [];
+  public gameState: string = 'playing';
+  public guessCounter: number = 0;
 
   constructor() {
     this.numberToGuess = this.generateNumberToGuess();
