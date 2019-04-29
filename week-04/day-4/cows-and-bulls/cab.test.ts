@@ -23,5 +23,12 @@ test('Test constructor type', (t:any) => {
   t.end();
 });
 
-let num: CowsAndBulls = new CowsAndBulls();
-console.log(typeof num.numberToGuess);
+test('Test getUserInput() with 4 digits (6789)', (t:any) => {
+  let num: CowsAndBulls = new CowsAndBulls();
+
+  let actual: any = num.getUserInput();
+  let expected: string = '6789';
+
+  t.equal(actual, expected);
+  t.end();
+});
