@@ -1,27 +1,28 @@
 .container {
   align-items: center;
   display: flex;
-  flex-flow: row-reverse;
+  flex-direction: column;
+  flex: 1;
   /* justify-content: space-around; */
 }
 
 .item {
-  align-self: flex-end;
-  height: 100px;
-  min-width: 100px;
+  align-self: flex-start;
+  min-height: 100px;
+  width: 100%;
 }
 
 .green {
   background-color: rgb(70, 208, 3);
-  flex-grow: 1;
+  order: 0;
 }
 
 .yellow {
   background-color: rgb(254, 208, 33);
-  flex-grow: 2;
+  order: 2;
 }
 
 .purple {
   background-color: rgb(157, 0, 255);
-  flex-grow: 1;
+  order: 1;
 }
