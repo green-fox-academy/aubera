@@ -2,32 +2,32 @@
   background-color: rgb(31,255,255);
   height: 90px;
   margin: auto;
-  width: 500px;
+  width: 100%;
 }
 
 .container {
   display: flex;
   height: 550px;
   justify-content: space-between;
-  margin: auto;
-  width: 500px;
+  margin: 0;
+  width: 100%;
   z-index: -1;
 }
 
 .left {
   background-color: rgb(252,149,6);
-  flex-grow: 1;
+  width: 100px;
 }
 
 .main {
   background-color: rgb(251,0,7);
-  flex-grow: 3;
+  flex-grow: 1;
   margin: 0 20px;
 }
 
 .right {
   background-color: rgb(108,0,108);
-  flex-grow: 1;
+  width: 100px;
 }
 
 .fixed{
@@ -44,5 +44,5 @@
   background-color: rgb(12,0,253);
   height: 90px;
   margin: auto;
-  width: 500px;
+  width: 100%;
 }
