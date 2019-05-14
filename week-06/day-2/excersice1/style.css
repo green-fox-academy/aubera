@@ -7,17 +7,20 @@
 .item {
   align-self: flex-end;
   height: 100px;
-  width: 100px;
+  min-width: 100px;
 }
 
 .green {
   background-color: rgb(70, 208, 3);
+  flex-grow: 1;
 }
 
 .yellow {
   background-color: rgb(254, 208, 33);
+  flex-grow: 2;
 }
 
 .purple {
   background-color: rgb(157, 0, 255);
+  flex-grow: 1;
 }
