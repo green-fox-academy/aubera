@@ -10,9 +10,9 @@
 //     - If ">" is clicked the selected item should be moved to the right side and the first item on the left side should be selected
 // 5, Check all the edge cases, no error should be printed to the console
 
-const body = document.querySelector('body');
-const list = ['bread', 'milk', 'orange', 'tomato'];
+const list = ['bread', 'milk', 'orange', 'tomato', 'cheese', 'carrot', 'salad'];
 
+const body = document.querySelector('body');
 var container = document.createElement('div');
 container.classList.add('container');
 body.appendChild(container);
@@ -33,6 +33,14 @@ up.onclick = () => {
 
 down.onclick = () => {
   moveDown();
+};
+
+remove.onclick = () => {
+  removeItem();
+};
+
+right.onclick = () => {
+  moveItem();
 };
 
 function createFirstTable(){
@@ -65,7 +73,7 @@ function createButtons(){
   down.innerHTML = 'Down';
   down.classList.add('button', 'down');
   buttons.appendChild(down);
-  buttons.classList.add('table');
+  buttons.classList.add('table', 'buttons');
   container.appendChild(buttons);
 }
 
@@ -80,7 +88,7 @@ function createSecondTable(){
 }
 
 function selectFirstItem(){
-  var first = document.querySelectorAll('.item')[0];
+  var first = document.querySelector('.first').querySelector('.item');
   first.classList.add('selected');
 }
 
@@ -103,4 +111,20 @@ function moveDown(){
       break;
     }
   }
+}
+
+function removeItem(){
+  var table = document.querySelector('.first');
+  var selected = document.querySelector('.selected');
+  table.removeChild(selected);
+  selectFirstItem();
+}
+
+function moveItem(){
+  var table = document.querySelector('.first');
+  var secondTable = document.querySelector('.second');
+  var selected = document.querySelector('.selected');
+  selected.classList.remove('selected');
+  secondTable.appendChild(selected);
+  selectFirstItem();
 }
