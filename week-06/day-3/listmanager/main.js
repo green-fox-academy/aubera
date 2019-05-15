@@ -17,14 +17,33 @@ var container = document.createElement('div');
 container.classList.add('container');
 body.appendChild(container);
 
+createFirstTable();
+createButtons();
+createSecondTable();
+selectFirstItem();
+
+var up = document.querySelector('.up');
+var down = document.querySelector('.down');
+var right = document.querySelector('.right');
+var remove = document.querySelector('.remove');
+
+up.onclick = () => {
+  moveUp();
+};
+
+down.onclick = () => {
+  moveDown();
+};
+
 function createFirstTable(){
   var table = document.createElement('div');
   for (let i in list){
     var item = document.createElement('div');
     item.innerHTML = list[i];
+    item.classList.add('item');
     table.appendChild(item);
   }
-  table.classList.add('table', 'border');
+  table.classList.add('table', 'border', 'first');
   container.appendChild(table);
 }
 
@@ -32,19 +51,19 @@ function createButtons(){
   var buttons = document.createElement('div');
   var up = document.createElement('button');
   up.innerHTML = 'Up';
-  up.classList.add('button');
+  up.classList.add('button', 'up');
   buttons.appendChild(up);
   var right = document.createElement('button');
   right.innerHTML = '>';
-  right.classList.add('button');
+  right.classList.add('button', 'right');
   buttons.appendChild(right);
   var remove = document.createElement('button');
   remove.innerHTML = 'X';
-  remove.classList.add('button');
+  remove.classList.add('button', 'remove');
   buttons.appendChild(remove);
   var down = document.createElement('button');
   down.innerHTML = 'Down';
-  down.classList.add('button');
+  down.classList.add('button', 'down');
   buttons.appendChild(down);
   buttons.classList.add('table');
   container.appendChild(buttons);
@@ -56,10 +75,32 @@ function createSecondTable(){
     var item = document.createElement('div');
     table.appendChild(item);
   }
-  table.classList.add('table', 'border');
+  table.classList.add('table', 'border', 'second');
   container.appendChild(table);
 }
 
-createFirstTable();
-createButtons();
-createSecondTable();
+function selectFirstItem(){
+  var first = document.querySelectorAll('.item')[0];
+  first.classList.add('selected');
+}
+
+function moveUp(){
+  var items = document.querySelector('.first').querySelectorAll('.item');
+  for (let i = 0; i < items.length; i++){
+    if (items[i].classList.contains('selected') && i > 0){
+      items[i - 1].classList.add('selected');
+      items[i].classList.remove('selected');
+    }
+  }
+}
+
+function moveDown(){
+  var items = document.querySelector('.first').querySelectorAll('.item');
+  for (let i = 0; i < items.length; i++){
+    if (items[i].classList.contains('selected') && i < items.length - 1){
+      items[i + 1].classList.add('selected');
+      items[i].classList.remove('selected');
+      break;
+    }
+  }
+}
