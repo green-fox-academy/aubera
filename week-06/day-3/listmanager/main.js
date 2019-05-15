@@ -43,9 +43,9 @@ right.onclick = () => {
   moveItem();
 };
 
-function createFirstTable(){
+function createFirstTable() {
   var table = document.createElement('div');
-  for (let i in list){
+  for (let i in list) {
     var item = document.createElement('div');
     item.innerHTML = list[i];
     item.classList.add('item');
@@ -55,7 +55,7 @@ function createFirstTable(){
   container.appendChild(table);
 }
 
-function createButtons(){
+function createButtons() {
   var buttons = document.createElement('div');
   var up = document.createElement('button');
   up.innerHTML = 'Up';
@@ -77,9 +77,9 @@ function createButtons(){
   container.appendChild(buttons);
 }
 
-function createSecondTable(){
+function createSecondTable() {
   var table = document.createElement('div');
-  for (let i in list){
+  for (let i in list) {
     var item = document.createElement('div');
     table.appendChild(item);
   }
@@ -87,25 +87,25 @@ function createSecondTable(){
   container.appendChild(table);
 }
 
-function selectFirstItem(){
+function selectFirstItem() {
   var first = document.querySelector('.first').querySelector('.item');
   first.classList.add('selected');
 }
 
-function moveUp(){
+function moveUp() {
   var items = document.querySelector('.first').querySelectorAll('.item');
-  for (let i = 0; i < items.length; i++){
-    if (items[i].classList.contains('selected') && i > 0){
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].classList.contains('selected') && i > 0) {
       items[i - 1].classList.add('selected');
       items[i].classList.remove('selected');
     }
   }
 }
 
-function moveDown(){
+function moveDown() {
   var items = document.querySelector('.first').querySelectorAll('.item');
-  for (let i = 0; i < items.length; i++){
-    if (items[i].classList.contains('selected') && i < items.length - 1){
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].classList.contains('selected') && i < items.length - 1) {
       items[i + 1].classList.add('selected');
       items[i].classList.remove('selected');
       break;
@@ -113,18 +113,22 @@ function moveDown(){
   }
 }
 
-function removeItem(){
+function removeItem() {
   var table = document.querySelector('.first');
   var selected = document.querySelector('.selected');
-  table.removeChild(selected);
-  selectFirstItem();
+  try {
+    table.removeChild(selected);
+    selectFirstItem();
+  } catch (e) {}
 }
 
-function moveItem(){
+function moveItem() {
   var table = document.querySelector('.first');
   var secondTable = document.querySelector('.second');
   var selected = document.querySelector('.selected');
-  selected.classList.remove('selected');
-  secondTable.appendChild(selected);
-  selectFirstItem();
+  try {
+    selected.classList.remove('selected');
+    secondTable.appendChild(selected);
+    selectFirstItem();
+  } catch (e) {}
 }
