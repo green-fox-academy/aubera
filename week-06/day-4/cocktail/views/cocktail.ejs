@@ -3,8 +3,27 @@
   <head>
     <meta charset="utf-8">
     <title>The Best Cocktails</title>
+    <link rel="stylesheet" href="/static/style.css">
   </head>
   <body>
-
+    <h1>Cocktails</h1>
+    <a href="/">ALL</a>
+    <% alcoholList.forEach(item => { %><a href="?alcohol=<%= item %>"><%= item.toUpperCase() %></a><% }); %>
+    <table>
+      <tr>
+        <th>NAME</th>
+        <th>PRICE</th>
+      </tr>
+      <% cocktails.forEach(item => { %>
+        <tr>
+          <td>
+            <strong><%= item.name %></strong><%= item.isAlcoholic ? '' : ' (non-alcoholic)'%>
+            <br>
+            <%= item.contains.join(', ') %>
+          </td>
+          <td><strong><%= item.price %> Ft</strong></td>
+        </tr>
+        <% }); %>
+    </table>
   </body>
 </html>
