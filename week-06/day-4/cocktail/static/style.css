@@ -1,0 +1,34 @@
+body {
+  font-family: sans-serif;
+  margin-left: 5%;
+  margin-top: 2%;
+}
+
+a {
+  color: purple;
+  margin-right: 50px;
+  text-decoration: none;
+}
+
+table {
+  margin-top: 2%;
+  width: 700px;
+}
+
+th {
+  background-color: black;
+  color: white;
+  padding: 2%;
+}
+
+td {
+  padding: 2%;
+}
+
+strong {
+  font-size: 1.2rem;
+}
+
+tr:nth-child(even){
+  background-color: #ddd;
+}
