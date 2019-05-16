@@ -8,13 +8,13 @@
   <body>
     <h1>Cocktails</h1>
     <a href="/">ALL</a>
-    <% alcoholList.forEach(item => { %><a href="?alcohol=<%= item %>"><%= item.toUpperCase() %></a><% }); %>
+    <% data.alcoholList.forEach(item => { %><a href="?alcohol=<%= item %>"><%= item.toUpperCase() %></a><% }); %>
     <table>
       <tr>
         <th>NAME</th>
         <th>PRICE</th>
       </tr>
-      <% cocktails.forEach(item => { %>
+      <% data.cocktails.forEach(item => { %>
         <tr>
           <td>
             <strong><%= item.name %></strong><%= item.isAlcoholic ? '' : ' (non-alcoholic)'%>
