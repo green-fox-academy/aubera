@@ -62,6 +62,14 @@ const forecasts = [
   },
 ];
 
+function citySelector(city){
+  for (let i in forecasts){
+    if (forecasts[i].city === city){
+      return forecasts[i].weather;
+    }
+  }
+}
+
 app.set('view engine', 'ejs');
 
 app.use('/static', express.static('static'));
@@ -69,6 +77,13 @@ app.use('/assets', express.static('assets'));
 
 app.get('/', (req, res) => {
   res.render('weather', {forecasts: forecasts});
+});
+
+app.get('/cities/:city', (req, res) => {
+  res.render('city', {
+    city: req.params.city,
+    data: citySelector(req.params.city)
+  });
 });
 
 app.listen(PORT, () => {
