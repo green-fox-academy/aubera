@@ -3,9 +3,31 @@
   <head>
     <meta charset="utf-8">
     <title>Weather App</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/weather.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,900" rel="stylesheet">
   </head>
   <body>
-
+    <div class="wrapper">
+      <div class="container">
+        <% forecasts.forEach(item => { %>
+          <div class="element">
+            <div class="left">
+              <div class="city">
+                <a href="/cities/<%= item.city %>"><strong><%= item.city %></strong></a><br>
+                <%= item.location %>
+              </div>
+            </div>
+            <div class="right">
+              <div class="temp">
+                <%= item.weather[0].temp %>°C
+              </div>
+              <div class="icon">
+                <img src="/assets/<%= item.weather[0].icon %>.png">
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
   </body>
 </html>
