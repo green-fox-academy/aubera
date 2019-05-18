@@ -1,11 +1,13 @@
 body {
   margin: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .wrapper {
   background-color: rgb(232, 236, 238);
   left: 0;
-  margin: 0;
+  margin: 5%;
   padding: 1%;
   position: relative;
   top: 0;
