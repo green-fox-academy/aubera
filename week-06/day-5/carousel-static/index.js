@@ -38,16 +38,16 @@ function setMainImage(index) {
   mainImage.setAttribute('style', 'background-image: url(' + pictures[index].src + ')');
   mainImageTitle.innerHTML = pictures[index].title;
   mainImageDescription.innerHTML = pictures[index].description;
-  for (let i = 0; i < thumbnails.getElementsByTagName('div').length; i++){
-    thumbnails.getElementsByTagName('div')[i].classList.remove('selected');
+  for (let i = 0; i < document.getElementsByTagName('img').length; i++){
+    document.getElementsByTagName('img')[i].classList.remove('selected');
   }
-  thumbnails.getElementsByTagName('div')[index].classList.add('selected');
+  document.getElementsByTagName('img')[index].classList.add('selected');
   actualImage = index;
 }
 
 function createThumbnails(index){
   var element = document.createElement('div');
-  element.classList.add('element', index);
+  element.classList.add('element');
   element.onclick = function(){setMainImage(index);};
   var img = document.createElement('img');
   img.classList.add('thumb');
@@ -57,7 +57,7 @@ function createThumbnails(index){
 }
 
 function initPage(index) {
-  for (let i in pictures) {
+  for (let i = 0; i < pictures.length; i++) {
     createThumbnails(i);
   }
   setMainImage(index);
