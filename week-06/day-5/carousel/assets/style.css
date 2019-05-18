@@ -71,12 +71,12 @@ p {
   width: 40px;
 }
 
-.cls-1 {
+.button>svg>path {
   fill: #4e4e4e;
   fill-rule: evenodd;
 }
 
-.cls-2 {
+.button:hover>svg>path {
   fill: #cecece;
   fill-rule: evenodd;
 }
