@@ -22,17 +22,13 @@ var actualImage = 0;
 
 initPage(actualImage);
 
-body.addEventListener("keydown", function(event){
+body.addEventListener("keydown", (event)=>{
   event.keyCode === 37 ? prevImage() : event.keyCode === 39 ? nextImage() : '';
 });
 
-leftButton.onclick = function() {
-  prevImage();
-};
+leftButton.onclick = () => {prevImage();};
 
-rightButton.onclick = function() {
-  nextImage();
-};
+rightButton.onclick = () => {nextImage();};
 
 function setMainImage(index) {
   mainImage.setAttribute('style', 'background-image: url(' + pictures[index].src + ')');
@@ -48,7 +44,7 @@ function setMainImage(index) {
 function createThumbnails(index){
   var element = document.createElement('div');
   element.classList.add('element');
-  element.onclick = function(){setMainImage(index);};
+  element.onclick = ()=>{setMainImage(index);};
   var img = document.createElement('img');
   img.classList.add('thumb');
   img.setAttribute('src', pictures[index].src);
