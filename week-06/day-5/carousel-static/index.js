@@ -48,7 +48,14 @@ function createThumbnails(index){
   var img = document.createElement('img');
   img.classList.add('thumb');
   img.setAttribute('src', pictures[index].src);
+  var overlay = document.createElement('div');
+  overlay.classList.add('overlay');
+  var text = document.createElement('div');
+  text.innerHTML = pictures[index].title;
+  text.classList.add('text');
+  overlay.appendChild(text);
   element.appendChild(img);
+  element.appendChild(overlay);
   thumbnails.appendChild(element);
 }
 
