@@ -88,10 +88,10 @@ p {
 }
 
 .element {
-  position: relative;
   height: 100%;
   margin: 2%;
   max-height: 50px;
+  position: relative;
   width: 100%;
 }
 
@@ -114,19 +114,19 @@ p {
 }
 
 .overlay {
-  position: absolute;
-  bottom: -5px;
-  left: 5px;
   background-color: rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  width: calc(100% - 10px);
+  bottom: -5px;
   height: 0;
+  left: 5px;
+  overflow: hidden;
+  position: absolute;
   transition: .2s ease;
+  width: calc(100% - 10px);
 }
 
 .element:hover .overlay {
-  height: 100%;
   cursor: pointer;
+  height: 100%;
 }
 
 .text {
