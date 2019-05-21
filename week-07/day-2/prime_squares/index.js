@@ -25,7 +25,7 @@ function changeColor() {
   nIntervId = setInterval(() => {
     isPrime(counter);
     counter++;
-    counter === 100 ? clearInterval(nIntervId) : '';
+    counter === 101 ? clearInterval(nIntervId) : '';
   }, 100);
 }
 
