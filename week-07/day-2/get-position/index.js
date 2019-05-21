@@ -6,7 +6,7 @@ button.onclick = (event) => {
   event.preventDefault();
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = console.log;
-  xhr.open('GET', 'http://api.ipapi.com/' + document.querySelector('input').value + '?access_key=c255bae3f57af63b9621f054081b4366', true);
+  xhr.open('GET', 'http://api.ipapi.com/' + document.querySelector('input').value + '?access_key=MY_API_KEY', true);
   xhr.send(null);
   xhr.onload = function(data) {
     if (JSON.parse(data.target.response).city != null){
@@ -21,5 +21,5 @@ button.onclick = (event) => {
 };
 
 function mapAPICaller(obj){
-  iFrame.setAttribute('src', 'https://www.google.com/maps/embed/v1/place?key=AIzaSyAS-HpV459V-m1VsG_Zkbt2sdTeZpF9nOA&q=' + obj);
+  iFrame.setAttribute('src', 'https://www.google.com/maps/embed/v1/place?key=MY_API_KEY=' + obj);
 }
