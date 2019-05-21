@@ -4,7 +4,7 @@ const container = document.querySelector('.container');
 
 const xhr = new XMLHttpRequest();
 xhr.onreadystatechange = console.log;
-xhr.open('GET', 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=moon+landing+Apollo+11&api-key=J2CEtHpSwB0Vm8WjLSfmOZAmfiNQv2or', true);
+xhr.open('GET', 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=moon+landing+Apollo+11&api-key=MY_API_KEY', true);
 xhr.send(null);
 xhr.onload = (data) => {
   // JSON.parse(data.target.response).response.docs;
