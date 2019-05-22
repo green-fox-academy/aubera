@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 
 app.get('/doubling', (req, res) => {
   var data = {};
-  if (req.query.input && !isNaN(req.query.input)){
+  if (req.query.input && !isNaN(req.query.input)) {
     data = {
       'received': req.query.input,
       'result': req.query.input * 2
@@ -22,7 +22,33 @@ app.get('/doubling', (req, res) => {
       "error": "Please provide an input!"
     };
   }
-  res.send({data: data});
+  res.send({
+    data: data
+  });
+});
+
+app.get('/greeter', (req, res) => {
+  var data = {};
+  if (!req.query.name && !req.query.title) {
+    data = {
+      "error": "Please provide a name and a title!"
+    };
+  } else if (!req.query.name) {
+    data = {
+      "error": "Please provide a name!"
+    };
+  } else if (!req.query.title) {
+    data = {
+      "error": "Please provide a title!"
+    };
+  } else {
+    data = {
+      'welcome_message': 'Oh, hi there ' + req.query.name + ', my dear ' + req.query.title + '!'
+    };
+  }
+  res.send({
+    data: data
+  });
 });
 
 app.listen(PORT, () => {
