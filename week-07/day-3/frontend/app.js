@@ -10,6 +10,21 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/doubling', (req, res) => {
+  var data = {};
+  if (req.query.input && !isNaN(req.query.input)){
+    data = {
+      'received': req.query.input,
+      'result': req.query.input * 2
+    };
+  } else {
+    data = {
+      "error": "Please provide an input!"
+    };
+  }
+  res.send({data: data});
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
