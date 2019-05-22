@@ -25,9 +25,7 @@ app.get('/doubling', (req, res) => {
       "error": "Please provide an input!"
     };
   }
-  res.send({
-    data: data
-  });
+  res.send({data});
 });
 
 app.get('/greeter', (req, res) => {
@@ -49,9 +47,7 @@ app.get('/greeter', (req, res) => {
       'welcome_message': 'Oh, hi there ' + req.query.name + ', my dear ' + req.query.title + '!'
     };
   }
-  res.send({
-    data: data
-  });
+  res.send({data});
 });
 
 app.get('/appenda/:appendable', (req, res) => {
