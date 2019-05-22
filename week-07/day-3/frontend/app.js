@@ -1,10 +1,13 @@
 //jshint esversion: 6
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3000;
 
 app.use(express.static('assets'));
+app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
@@ -51,6 +54,33 @@ app.get('/greeter', (req, res) => {
   });
 });
 
+app.get('/appenda/:appendable', (req, res) => {
+  var data = {
+    "appended": req.params.appendable + 'a'
+  };
+  res.send(data);
+});
+
+app.post('/dountil/:action', (req, res) => {
+  var data = {};
+  if (req.params.action === 'sum'){
+    data = {"result" : sumTo(req.body.until)};
+  } else if (req.params.action === 'factor'){
+    data = {"result" : multiplyTo(req.body.until)};
+  }
+  res.send(data);
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+function sumTo(n) {
+  if (n == 1) return 1;
+  return n + sumTo(n - 1);
+}
+
+function multiplyTo(n) {
+  if (n == 1) return 1;
+  return n * sumTo(n - 1);
+}
