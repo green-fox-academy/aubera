@@ -16,7 +16,6 @@ button.onclick = () => {
   }
   ajaxRequest(generateSearchQuery());
 };
-console.log(table.firstChild);
 
 function ajaxRequest(what) {
   let xhr = new XMLHttpRequest();
