@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Bookstore</title>
-  </head>
-  <body>
-    <h1>These are my books</h1>
-    <table class=booktitles>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Category</th>
-        <th>Publisher</th>
-        <th>Price</th>
-      </tr>
-    </table>
-    <script type="text/javascript" src="/assets/index.js"></script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Bookstore</title>
+</head>
+
+<body>
+  <h1>These are my books</h1>
+  <table class=booktitles>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Category</th>
+      <th>Publisher</th>
+      <th>Price</th>
+    </tr>
+  </table><br>
+  <form class="" method="post">
+    <input type="text" name="category" placeholder="Search for a category"><br>
+    <input type="text" name="publisher" placeholder="Search for a publisher"><br>
+    <input type="text" name="price" placeholder="Price to search">
+    <input type="radio" name="greater" value="greater"> Greater than
+    <input type="radio" name="less" value="less"> Less than<br>
+    <br><button type="button" name="button">Search</button>
+  </form>
+  <script type="text/javascript" src="/assets/index.js"></script>
+</body>
+
 </html>
