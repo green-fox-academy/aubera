@@ -8,10 +8,10 @@ const app = express();
 const PORT = 3000;
 
 app.post('/', (req, res) => {
-  // queryDB(deleteTable());
-  // queryDB(createTable());
-  // queryDB(fillTable(readCSVFile('./user.csv')));
-  // exportAllSQLData();
+  queryDB(deleteTable());
+  queryDB(createTable());
+  queryDB(fillTable(readCSVFile('./user.csv')));
+  exportAllSQLData();
   compareCSVtoJSON(readCSVFile('./user.csv'), readJSONFile('./table.json'));
 });
 
@@ -43,7 +43,7 @@ function queryDB(query) {
         // res.status(500).send('Database error');
         return;
       }
-      console.log('Data imported to db');
+      // console.log('Data imported to db');
       // res.status(200).send('Data imported to db');
     }
   );
