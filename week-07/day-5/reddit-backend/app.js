@@ -6,6 +6,11 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const PORT = 3000;
+let post_id;
+let userName;
+let queryText;
+let statCode;
+let successMsg;
 
 app.use(bodyParser.json());
 
@@ -63,11 +68,8 @@ app.post('/posts', (req, res) => {
 });
 
 app.put('/posts/:id/upvote', (req, res) => {
-  let post_id = req.params.id;
-  let userName = req.headers.username;
-  let queryText;
-  let statCode;
-  let successMsg;
+  post_id = req.params.id;
+  userName = req.headers.username;
   connection.query(`SELECT vote FROM votes WHERE post_id = ${post_id} AND user_name = '${userName}';`,
     function(error, rows) {
       if (error) {
@@ -75,21 +77,21 @@ app.put('/posts/:id/upvote', (req, res) => {
         res.status(500).send('Database error');
         return;
       } else {
-        if (rows.length === 0){
+        if (rows.length === 0) {
           queryText = `INSERT INTO votes (post_id, user_name, vote) VALUES (${post_id}, '${userName}', 1);`;
           statCode = 201;
           successMsg = 'Vote imported to database';
           queryDBNoResponse(queryText, successMsg);
           getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
         }
-        if (rows[0].vote === 1){
+        if (rows[0].vote === 1) {
           queryText = `UPDATE votes SET vote = 0 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
           statCode = 201;
           successMsg = 'Vote updated in database';
           queryDBNoResponse(queryText, successMsg);
           getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
         }
-        if (rows[0].vote === -1 || rows[0].vote === 0){
+        if (rows[0].vote === -1 || rows[0].vote === 0) {
           queryText = `UPDATE votes SET vote = 1 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
           statCode = 201;
           successMsg = 'Vote updated in database';
@@ -102,11 +104,8 @@ app.put('/posts/:id/upvote', (req, res) => {
 });
 
 app.put('/posts/:id/downvote', (req, res) => {
-  let post_id = req.params.id;
-  let userName = req.headers.username;
-  let queryText;
-  let statCode;
-  let successMsg;
+  post_id = req.params.id;
+  userName = req.headers.username;
   connection.query(`SELECT vote FROM votes WHERE post_id = ${post_id} AND user_name = '${userName}';`,
     function(error, rows) {
       if (error) {
@@ -114,26 +113,74 @@ app.put('/posts/:id/downvote', (req, res) => {
         res.status(500).send('Database error');
         return;
       } else {
-        if (rows.length === 0){
+        if (rows.length === 0) {
           queryText = `INSERT INTO votes (post_id, user_name, vote) VALUES (${post_id}, '${userName}', -1);`;
           statCode = 201;
           successMsg = 'Vote imported to database';
           queryDBNoResponse(queryText, successMsg);
           getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
         }
-        if (rows[0].vote === -1){
+        if (rows[0].vote === -1) {
           queryText = `UPDATE votes SET vote = 0 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
           statCode = 201;
           successMsg = 'Vote updated in database';
           queryDBNoResponse(queryText, successMsg);
           getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
         }
-        if (rows[0].vote === 1 || rows[0].vote === 0){
+        if (rows[0].vote === 1 || rows[0].vote === 0) {
           queryText = `UPDATE votes SET vote = -1 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
           statCode = 201;
           successMsg = 'Vote updated in database';
           queryDBNoResponse(queryText, successMsg);
           getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+        }
+      }
+    }
+  );
+});
+
+app.delete('/posts/:id', (req, res) => {
+  post_id = req.params.id;
+  userName = req.headers.username;
+  let postToDelete;
+  connection.query(`SELECT owner_name FROM posts WHERE post_id = ${post_id};`,
+    function(error, rows) {
+      if (error) {
+        console.log(error.toString());
+        res.status(500).send('Database error');
+        return;
+      } else {
+        if (rows[0].owner_name != userName){
+          res.status(401).send('Unauthorized user');
+          return;
+        } else {
+          connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
+            `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
+            `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
+            `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
+            `LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id ` +
+            `WHERE v.user_name = '${userName}') AS p2 ON p1.post_id = p2.post_id WHERE p1.post_id = ${post_id};`,
+            function(err, rows) {
+              if (err) {
+                console.log(err.toString());
+                res.status(500).send('Database error');
+                return;
+              }
+              console.log('Post temporarily saved');
+              postToDelete = rows;
+            }
+          );
+          connection.query(`DELETE FROM posts WHERE post_id = ${post_id};`,
+            function(err, rows) {
+              if (err) {
+                console.log(err.toString());
+                res.status(500).send('Database error');
+                return;
+              }
+              console.log('Post successfully deleted from database');
+              res.status(200).json(postToDelete);
+            }
+          );
         }
       }
     }
@@ -164,7 +211,7 @@ function createTable() {
   return 'CREATE TABLE `posts` (`post_id` INT NOT NULL AUTO_INCREMENT,`title` VARCHAR(255) NOT NULL,`url` VARCHAR(255) NOT NULL,`timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,`score` INT(20) DEFAULT 0, `owner_name` VARCHAR(100) NOT NULL, PRIMARY KEY (`post_id`));';
 }
 
-function queryDBWithResponse(sqlQuery, statCode, successMsg, res){
+function queryDBWithResponse(sqlQuery, statCode, successMsg, res) {
   connection.query(sqlQuery,
     function(error, rows) {
       if (error) {
@@ -179,7 +226,7 @@ function queryDBWithResponse(sqlQuery, statCode, successMsg, res){
   );
 }
 
-function queryDBNoResponse(sqlQuery, successMsg){
+function queryDBNoResponse(sqlQuery, successMsg) {
   connection.query(sqlQuery,
     function(error, rows) {
       if (error) {
@@ -192,12 +239,12 @@ function queryDBNoResponse(sqlQuery, successMsg){
   );
 }
 
-function getSelectedPostForUser(userName, post_id, statCode, successMsg, res){
+function getSelectedPostForUser(userName, post_id, statCode, successMsg, res) {
   connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
-  `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
-  `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
-  `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
-  `LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id ` +
+    `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
+    `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
+    `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
+    `LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id ` +
     `WHERE v.user_name = '${userName}') AS p2 ON p1.post_id = p2.post_id WHERE p1.post_id = ${post_id};`,
     function(err, rows) {
       if (err) {
@@ -212,10 +259,4 @@ function getSelectedPostForUser(userName, post_id, statCode, successMsg, res){
 }
 
 //select all posts voted by user
-//SELECT p.post_id, p.title, p.url, p.timestamp, (SELECT SUM(vote) FROM votes WHERE post_id = p.post_id GROUP BY post_id) AS score, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id WHERE v.user_name = 'juli';
-
-//SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, (SELECT SUM(vote) FROM votes WHERE post_id = p1.post_id GROUP BY post_id) AS score, p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id WHERE v.user_name = 'juli') AS p2 ON p1.post_id = p2.post_id;
-
-//SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, (SELECT SUM(vote) FROM votes WHERE post_id = p1.post_id GROUP BY post_id) CASE WHEN (SELECT SUM(vote) FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NULL THEN 0 ELSE (SELECT SUM(vote) FROM votes WHERE post_id = p1.post_id GROUP BY post_id) END AS score, p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id WHERE v.user_name = 'juli') AS p2 ON p1.post_id = p2.post_id;
-
 //SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id WHERE v.user_name = 'juli') AS p2 ON p1.post_id = p2.post_id;
