@@ -21,13 +21,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/posts', (req, res) => {
-  // FIXME: let query = ''; //Here should be two queries a user specific and a non-user specific.
+  !req.headers.username ? userName = '' : userName = req.headers.username;
   connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
     `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
     `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
     `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
     `LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id ` +
-    `WHERE v.user_name = '${req.headers.username}') AS p2 ON p1.post_id = p2.post_id;`,
+    `WHERE v.user_name = '${userName}') AS p2 ON p1.post_id = p2.post_id;`,
     function(err, rows) {
       if (err) {
         console.log(err.toString());
@@ -334,21 +334,6 @@ connection.connect((error) => {
   console.log('Connection established');
 });
 
-function queryDBWithResponse(sqlQuery, statCode, successMsg, res) {
-  connection.query(sqlQuery,
-    function(error, rows) {
-      if (error) {
-        console.log(error.toString());
-        res.status(500).send('Database error');
-        return;
-      } else {
-        console.log(successMsg);
-        res.status(statCode).json(rows);
-      }
-    }
-  );
-}
-
 function queryDBNoResponse(sqlQuery, successMsg) {
   connection.query(sqlQuery,
     function(error, rows) {
@@ -380,6 +365,3 @@ function getSelectedPostForUser(userName, post_id, statCode, successMsg, res) {
     }
   );
 }
-
-//select all posts voted by user
-//SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id WHERE v.user_name = 'juli') AS p2 ON p1.post_id = p2.post_id;
