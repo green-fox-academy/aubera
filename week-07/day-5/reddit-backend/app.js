@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.send('hello world!');
 });
 
-app.get('/posts ', (req, res) => {
+app.get('/posts', (req, res) => {
   // FIXME: let query = ''; //Here should be two queries a user specific and a non-user specific.
   connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
     `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
@@ -59,7 +59,7 @@ app.post('/posts', (req, res) => {
               res.status(500).send('Database error');
               return;
             } else {
-              console.log('Post imported to database');
+              console.log('Post added to database');
               res.status(201).json(rows);
             }
           }
@@ -95,27 +95,27 @@ app.put('/posts/:id/upvote', (req, res) => {
                   return;
                 } else {
                   connection.query(`SELECT vote FROM votes WHERE post_id = ${post_id} AND user_name = '${userName}';`,
-                  function(error, rows) {
+                  function(error, data) {
                     if (error) {
                       console.log(error.toString());
                       res.status(500).send('Database error');
                       return;
                     } else {
-                      if (rows.length === 0) {
+                      if (data.length === 0) {
                         queryText = `INSERT INTO votes (post_id, user_name, vote) VALUES (${post_id}, '${userName}', 1);`;
                         statCode = 201;
-                        successMsg = 'Vote imported to database';
+                        successMsg = 'Vote added to database';
                         queryDBNoResponse(queryText, successMsg);
                         getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
                       }
-                      if (rows[0].vote === 1) {
+                      else if (data[0].vote === 1) {
                         queryText = `UPDATE votes SET vote = 0 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
                         statCode = 201;
                         successMsg = 'Vote updated in database';
                         queryDBNoResponse(queryText, successMsg);
                         getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
                       }
-                      if (rows[0].vote === -1 || rows[0].vote === 0) {
+                      else if (data[0].vote === -1 || data[0].vote === 0) {
                         queryText = `UPDATE votes SET vote = 1 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
                         statCode = 201;
                         successMsg = 'Vote updated in database';
@@ -170,18 +170,18 @@ app.put('/posts/:id/downvote', (req, res) => {
                       if (rows.length === 0) {
                         queryText = `INSERT INTO votes (post_id, user_name, vote) VALUES (${post_id}, '${userName}', -1);`;
                         statCode = 201;
-                        successMsg = 'Vote imported to database';
+                        successMsg = 'Vote added to database';
                         queryDBNoResponse(queryText, successMsg);
                         getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
                       }
-                      if (rows[0].vote === -1) {
+                      else if (rows[0].vote === -1) {
                         queryText = `UPDATE votes SET vote = 0 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
                         statCode = 201;
                         successMsg = 'Vote updated in database';
                         queryDBNoResponse(queryText, successMsg);
                         getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
                       }
-                      if (rows[0].vote === 1 || rows[0].vote === 0) {
+                      else if (rows[0].vote === 1 || rows[0].vote === 0) {
                         queryText = `UPDATE votes SET vote = -1 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
                         statCode = 201;
                         successMsg = 'Vote updated in database';
@@ -302,10 +302,6 @@ connection.connect((error) => {
   }
   console.log('Connection established');
 });
-
-function createTable() {
-  return 'CREATE TABLE `posts` (`post_id` INT NOT NULL AUTO_INCREMENT,`title` VARCHAR(255) NOT NULL,`url` VARCHAR(255) NOT NULL,`timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,`score` INT(20) DEFAULT 0, `owner_name` VARCHAR(100) NOT NULL, PRIMARY KEY (`post_id`));';
-}
 
 function queryDBWithResponse(sqlQuery, statCode, successMsg, res) {
   connection.query(sqlQuery,
