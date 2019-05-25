@@ -72,33 +72,63 @@ app.post('/posts', (req, res) => {
 app.put('/posts/:id/upvote', (req, res) => {
   post_id = req.params.id;
   userName = req.headers.username;
-  connection.query(`SELECT vote FROM votes WHERE post_id = ${post_id} AND user_name = '${userName}';`,
+  connection.query(`SELECT user_name FROM users WHERE user_name = '${userName}';`,
     function(error, rows) {
       if (error) {
         console.log(error.toString());
         res.status(500).send('Database error');
         return;
       } else {
-        if (rows.length === 0) {
-          queryText = `INSERT INTO votes (post_id, user_name, vote) VALUES (${post_id}, '${userName}', 1);`;
-          statCode = 201;
-          successMsg = 'Vote imported to database';
-          queryDBNoResponse(queryText, successMsg);
-          getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
-        }
-        if (rows[0].vote === 1) {
-          queryText = `UPDATE votes SET vote = 0 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
-          statCode = 201;
-          successMsg = 'Vote updated in database';
-          queryDBNoResponse(queryText, successMsg);
-          getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
-        }
-        if (rows[0].vote === -1 || rows[0].vote === 0) {
-          queryText = `UPDATE votes SET vote = 1 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
-          statCode = 201;
-          successMsg = 'Vote updated in database';
-          queryDBNoResponse(queryText, successMsg);
-          getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+        if (rows.length === 0){
+          res.status(404).send('User not found');
+          return;
+        } else {
+          connection.query(`SELECT post_id FROM posts WHERE post_id = ${post_id};`,
+            function(error, rows) {
+              if (error) {
+                console.log(error.toString());
+                res.status(500).send('Database error');
+                return;
+              } else {
+                if (rows.length === 0){
+                  res.status(404).send('Post not found');
+                  return;
+                } else {
+                  connection.query(`SELECT vote FROM votes WHERE post_id = ${post_id} AND user_name = '${userName}';`,
+                  function(error, rows) {
+                    if (error) {
+                      console.log(error.toString());
+                      res.status(500).send('Database error');
+                      return;
+                    } else {
+                      if (rows.length === 0) {
+                        queryText = `INSERT INTO votes (post_id, user_name, vote) VALUES (${post_id}, '${userName}', 1);`;
+                        statCode = 201;
+                        successMsg = 'Vote imported to database';
+                        queryDBNoResponse(queryText, successMsg);
+                        getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+                      }
+                      if (rows[0].vote === 1) {
+                        queryText = `UPDATE votes SET vote = 0 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
+                        statCode = 201;
+                        successMsg = 'Vote updated in database';
+                        queryDBNoResponse(queryText, successMsg);
+                        getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+                      }
+                      if (rows[0].vote === -1 || rows[0].vote === 0) {
+                        queryText = `UPDATE votes SET vote = 1 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
+                        statCode = 201;
+                        successMsg = 'Vote updated in database';
+                        queryDBNoResponse(queryText, successMsg);
+                        getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+                      }
+                    }
+                  }
+                );
+                }
+              }
+            }
+          );
         }
       }
     }
@@ -108,33 +138,63 @@ app.put('/posts/:id/upvote', (req, res) => {
 app.put('/posts/:id/downvote', (req, res) => {
   post_id = req.params.id;
   userName = req.headers.username;
-  connection.query(`SELECT vote FROM votes WHERE post_id = ${post_id} AND user_name = '${userName}';`,
+  connection.query(`SELECT user_name FROM users WHERE user_name = '${userName}';`,
     function(error, rows) {
       if (error) {
         console.log(error.toString());
         res.status(500).send('Database error');
         return;
       } else {
-        if (rows.length === 0) {
-          queryText = `INSERT INTO votes (post_id, user_name, vote) VALUES (${post_id}, '${userName}', -1);`;
-          statCode = 201;
-          successMsg = 'Vote imported to database';
-          queryDBNoResponse(queryText, successMsg);
-          getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
-        }
-        if (rows[0].vote === -1) {
-          queryText = `UPDATE votes SET vote = 0 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
-          statCode = 201;
-          successMsg = 'Vote updated in database';
-          queryDBNoResponse(queryText, successMsg);
-          getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
-        }
-        if (rows[0].vote === 1 || rows[0].vote === 0) {
-          queryText = `UPDATE votes SET vote = -1 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
-          statCode = 201;
-          successMsg = 'Vote updated in database';
-          queryDBNoResponse(queryText, successMsg);
-          getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+        if (rows.length === 0){
+          res.status(404).send('User not found');
+          return;
+        } else {
+          connection.query(`SELECT post_id FROM posts WHERE post_id = ${post_id};`,
+            function(error, rows) {
+              if (error) {
+                console.log(error.toString());
+                res.status(500).send('Database error');
+                return;
+              } else {
+                if (rows.length === 0){
+                  res.status(404).send('Post not found');
+                  return;
+                } else {
+                  connection.query(`SELECT vote FROM votes WHERE post_id = ${post_id} AND user_name = '${userName}';`,
+                  function(error, rows) {
+                    if (error) {
+                      console.log(error.toString());
+                      res.status(500).send('Database error');
+                      return;
+                    } else {
+                      if (rows.length === 0) {
+                        queryText = `INSERT INTO votes (post_id, user_name, vote) VALUES (${post_id}, '${userName}', -1);`;
+                        statCode = 201;
+                        successMsg = 'Vote imported to database';
+                        queryDBNoResponse(queryText, successMsg);
+                        getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+                      }
+                      if (rows[0].vote === -1) {
+                        queryText = `UPDATE votes SET vote = 0 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
+                        statCode = 201;
+                        successMsg = 'Vote updated in database';
+                        queryDBNoResponse(queryText, successMsg);
+                        getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+                      }
+                      if (rows[0].vote === 1 || rows[0].vote === 0) {
+                        queryText = `UPDATE votes SET vote = -1 WHERE post_id = ${post_id} AND user_name = '${userName}';`;
+                        statCode = 201;
+                        successMsg = 'Vote updated in database';
+                        queryDBNoResponse(queryText, successMsg);
+                        getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+                      }
+                    }
+                  }
+                );
+                }
+              }
+            }
+          );
         }
       }
     }
