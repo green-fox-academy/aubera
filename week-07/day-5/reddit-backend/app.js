@@ -44,26 +44,57 @@ app.post('/posts', (req, res) => {
   title = req.body.title;
   url = req.body.url;
   userName = req.headers.username;
-  connection.query(`INSERT INTO posts (title, url, owner_name) VALUES ('${title}', '${url}', '${userName}');`,
-    function(err) {
-      if (err) {
-        console.log(err.toString());
-        res.status(500).send('Database error, not imported');
+  connection.query(`SELECT user_name FROM users WHERE user_name = '${userName}';`,
+    function(error, rows) {
+      if (error) {
+        console.log(error.toString());
+        res.status(500).send('Database error');
         return;
       } else {
-        // FIXME: Here should change the query for getting the score as well!
-        connection.query(`SELECT * FROM posts ORDER BY post_id DESC LIMIT 1;`,
-          function(error, rows) {
-            if (error) {
-              console.log(error.toString());
-              res.status(500).send('Database error');
+        if (rows.length === 0){
+          // these lines are intentionally commented out until the user registration will be created
+          // res.status(404).send('User not found');
+          // return;
+          console.log('No such user');
+        }
+        // else {
+        connection.query(`INSERT INTO posts (title, url, owner_name) VALUES ('${title}', '${url}', '${userName}');`,
+          function(err) {
+            if (err) {
+              console.log(err.toString());
+              res.status(500).send('Database error, not imported');
               return;
             } else {
-              console.log('Post added to database');
-              res.status(201).json(rows);
+              connection.query(`INSERT INTO users (user_name) VALUES ('${userName}');`,
+                function(err, rows) {
+                  if (err) {
+                    console.log(err.toString());
+                    res.status(500).send('Database error');
+                    return;
+                  }
+                  console.log('User added to database');
+                }
+              );
+              connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
+                `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
+                `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
+                `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
+                `LEFT JOIN (SELECT p.post_id, p.title, p.url, p.timestamp, p.owner_name, v.vote FROM posts p JOIN votes v ON p.post_id = v.post_id ` +
+                `WHERE v.user_name = '${userName}') AS p2 ON p1.post_id = p2.post_id ORDER BY p1.post_id DESC LIMIT 1;`,
+                function(err, rows) {
+                  if (err) {
+                    console.log(err.toString());
+                    res.status(500).send('Database error');
+                    return;
+                  }
+                  console.log('Post added to database');
+                  res.status(201).json(rows);
+                }
+              );
             }
           }
         );
+      // }
       }
     }
   );
