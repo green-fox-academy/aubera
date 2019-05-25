@@ -11,6 +11,8 @@ let userName;
 let queryText;
 let statCode;
 let successMsg;
+let title;
+let url;
 
 app.use(bodyParser.json());
 
@@ -39,10 +41,10 @@ app.get('/posts ', (req, res) => {
 });
 
 app.post('/posts', (req, res) => {
-  let title = req.body.title;
-  let url = req.body.url;
-  let ownerName = req.headers.username;
-  connection.query(`INSERT INTO posts (title, url, owner_name) VALUES ('${title}', '${url}', '${ownerName}');`,
+  title = req.body.title;
+  url = req.body.url;
+  userName = req.headers.username;
+  connection.query(`INSERT INTO posts (title, url, owner_name) VALUES ('${title}', '${url}', '${userName}');`,
     function(err) {
       if (err) {
         console.log(err.toString());
@@ -150,7 +152,10 @@ app.delete('/posts/:id', (req, res) => {
         res.status(500).send('Database error');
         return;
       } else {
-        if (rows[0].owner_name != userName){
+        if (rows.length === 0){
+          res.status(404).send('Post not found');
+          return;
+        } else if (rows[0].owner_name != userName){
           res.status(401).send('Unauthorized user');
           return;
         } else {
@@ -181,6 +186,37 @@ app.delete('/posts/:id', (req, res) => {
               res.status(200).json(postToDelete);
             }
           );
+        }
+      }
+    }
+  );
+});
+
+app.put('/posts/:id', (req, res) => {
+  post_id = req.params.id;
+  userName = req.headers.username;
+  title = req.body.title;
+  url = req.body.url;
+  let postToDelete;
+  connection.query(`SELECT owner_name FROM posts WHERE post_id = ${post_id};`,
+    function(error, rows) {
+      if (error) {
+        console.log(error.toString());
+        res.status(500).send('Database error');
+        return;
+      } else {
+        if (rows.length === 0){
+          res.status(404).send('Post not found');
+          return;
+        } else if (rows[0].owner_name != userName){
+          res.status(401).send('Unauthorized user');
+          return;
+        } else {
+          queryText = `UPDATE posts SET title = '${title}', url = '${url}' WHERE post_id = ${post_id};`;
+          statCode = 201;
+          successMsg = 'Post updated in database';
+          queryDBNoResponse(queryText, successMsg);
+          getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
         }
       }
     }
