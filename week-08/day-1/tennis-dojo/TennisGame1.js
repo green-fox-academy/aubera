@@ -6,7 +6,7 @@ function TennisGame1(player1Name, player2Name) {
 }
 
 TennisGame1.prototype.wonPoint = function(playerName) {
-  playerName === 'player1' ? this.m_score1 += 1 : this.m_score2 += 1;
+  playerName === 'player1' ? this.m_score1++ : this.m_score2++;
 };
 
 TennisGame1.prototype.getScore = function() {
