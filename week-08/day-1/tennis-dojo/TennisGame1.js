@@ -14,21 +14,21 @@ TennisGame1.prototype.getScore = function() {
   let scores = ['Love', 'Fifteen', 'Thirty', 'Forty'];
   if (this.m_score1 === this.m_score2) {
     if (this.m_score1 < 3) score = scores[this.m_score1] + '-All';
-    else score = "Deuce";
+    else score = 'Deuce';
   }
   else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
     if (this.m_score1 > this.m_score2) {
-      if (this.m_score1 - this.m_score2 >= 2) score = "Win for player1";
-      else score = "Advantage player1";
+      if (this.m_score1 - this.m_score2 >= 2) score = 'Win for player1';
+      else score = 'Advantage player1';
     } else {
-      if (this.m_score2 - this.m_score1 >= 2) score = "Win for player2";
-      else score = "Advantage player2";
+      if (this.m_score2 - this.m_score1 >= 2) score = 'Win for player2';
+      else score = 'Advantage player2';
     }
   }
   else score = scores[this.m_score1] + '-' + scores[this.m_score2];
   return score;
 };
 
-if (typeof window === "undefined") {
+if (typeof window === 'undefined') {
   module.exports = TennisGame1;
 }
