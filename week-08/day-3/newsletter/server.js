@@ -12,7 +12,6 @@ app.get('/', (req, res) => {
 app.post('/signup', (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
-  console.log(req.body);
   res.send(`<h1>Thanks ${username}, we will send updates to ${email}</h1>`);
 });
 
