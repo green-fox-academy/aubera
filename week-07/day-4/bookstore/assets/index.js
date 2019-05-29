@@ -27,6 +27,7 @@ function ajaxRequest(what) {
 }
 
 function listBooks(list, names) {
+  createTableHeader();
   for (let i = 0; i < list.length; i++) {
     var tr = document.createElement('tr');
     for (let j = 0; j < names.length; j++) {
@@ -36,6 +37,26 @@ function listBooks(list, names) {
     }
     table.appendChild(tr);
   }
+}
+
+function createTableHeader(){
+  let row = document.createElement('tr');
+  let title = document.createElement('th');
+  title.textContent = 'Title';
+  let author = document.createElement('th');
+  author.textContent = 'Author';
+  let category = document.createElement('th');
+  category.textContent = 'Category';
+  let publisher = document.createElement('th');
+  publisher.textContent = 'Publisher';
+  let price = document.createElement('th');
+  price.textContent = 'Price';
+  row.appendChild(title);
+  row.appendChild(author);
+  row.appendChild(category);
+  row.appendChild(publisher);
+  row.appendChild(price);
+  table.appendChild(row);
 }
 
 function generateSearchQuery(){
