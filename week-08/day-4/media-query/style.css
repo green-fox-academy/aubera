@@ -1,0 +1,36 @@
+body {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+div {
+  height: 200px;
+}
+
+.green, .purple {
+  width: 200px;
+}
+
+.yellow {
+  background-color: #f7d154;
+  width: calc(100vw - 450px);
+}
+
+.green {
+  background-color: #79cc46;
+}
+
+.purple {
+  background-color: #af40e8;
+}
+
+@media screen and (max-width: 800px) {
+  body {
+    flex-direction: column;
+  }
+
+  .yellow, .green, .purple{
+    width: 100%;
+  }
+}
