@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
 app.get('/posts', (req, res) => {
   !req.headers.username ? userName = '' : userName = req.headers.username;
-  connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
+  connection.query(`SELECT  p1.post_id, p1.title, p1.url, unix_timestamp(p1.timestamp) AS 'timestamp', CASE WHEN (SELECT SUM(vote) ` +
     `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
     `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
     `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
@@ -75,7 +75,7 @@ app.post('/posts', (req, res) => {
                   console.log('User added to database');
                 }
               );
-              connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
+              connection.query(`SELECT  p1.post_id, p1.title, p1.url, unix_timestamp(p1.timestamp) AS 'timestamp', CASE WHEN (SELECT SUM(vote) ` +
                 `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
                 `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
                 `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
@@ -250,7 +250,7 @@ app.delete('/posts/:id', (req, res) => {
           res.status(401).send('Unauthorized user');
           return;
         } else {
-          connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
+          connection.query(`SELECT  p1.post_id, p1.title, p1.url, unix_timestamp(p1.timestamp) AS 'timestamp', CASE WHEN (SELECT SUM(vote) ` +
             `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
             `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
             `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
@@ -348,7 +348,7 @@ function queryDBNoResponse(sqlQuery, successMsg) {
 }
 
 function getSelectedPostForUser(userName, post_id, statCode, successMsg, res) {
-  connection.query(`SELECT  p1.post_id, p1.title, p1.url, p1.timestamp, CASE WHEN (SELECT SUM(vote) ` +
+  connection.query(`SELECT  p1.post_id, p1.title, p1.url, unix_timestamp(p1.timestamp) AS 'timestamp', CASE WHEN (SELECT SUM(vote) ` +
     `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
     `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
     `p1.owner_name, CASE WHEN p2.vote IS NULL THEN 0 ELSE p2.vote END AS vote FROM posts p1 ` +
