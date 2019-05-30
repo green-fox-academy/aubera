@@ -1,0 +1,48 @@
+body, div {
+  align-items: center;
+  background-color: #2f315d;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+button {
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0 3px 7px 0 rgba(0,0,0,.5);
+  font-size: .9rem;
+  height: 50px;
+  margin: 3%;
+  width: 150px;
+}
+
+button[name="blue"] {
+  background-image: linear-gradient(#4c66a1, #3c548e);
+  border-bottom: 3px solid #293a6a;
+  border-top: 2px solid #5b78ba;
+  color: #c6d5f9;
+}
+
+button[name="red"] {
+  background-image: linear-gradient(#c85641, #ba4634);
+  border-bottom: 3px solid #7c3231;
+  border-top: 2px solid #ce6b58;
+  color: #f0ab9f;
+}
+
+button[name="green"] {
+  background-image: linear-gradient(#53ac65, #489954);
+  border-bottom: 3px solid #326844;
+  border-top: 2px solid #79cf91;
+  color: #b5f3c9;
+}
+
+button:hover {
+  filter: brightness(110%);
+}
+
+button:focus {
+  filter: brightness(90%);
+  outline: none;
+}
