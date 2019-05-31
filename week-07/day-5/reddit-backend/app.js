@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = 3000;
 let post_id;
@@ -14,6 +15,7 @@ let successMsg;
 let title;
 let url;
 
+app.use(cors('*'));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
