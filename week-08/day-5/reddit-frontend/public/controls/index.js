@@ -30,7 +30,7 @@ function listPosts(list) {
     upvote.appendChild(up);
     up.addEventListener('click', () => {
       //Here should change class to make upvote button color changing
-      upvoting(list[i].post_id);
+      changeVoting(list[i].post_id, 'up');
     });
 
     let downvote = document.createElement('div');
@@ -40,7 +40,7 @@ function listPosts(list) {
     downvote.appendChild(down);
     down.addEventListener('click', () => {
       //Here should change class to make downvote button color changing
-      downvoting(list[i].post_id);
+      changeVoting(list[i].post_id, 'down');
     });
 
     let score = document.createElement('div');
@@ -85,38 +85,18 @@ function getUserLoggedIn(){
   return sessionStorage.getItem('redditUserName');
 }
 
-function upvoting(post_id){
+function changeVoting(post_id, type){
   if (getUserLoggedIn()){
-    putUpvote(post_id);
+    console.log(type);
+    type === 'up' ? putVote(post_id, 'up') : putVote(post_id, 'down');
   } else {
     window.location.href = 'http://localhost:3000/login';
   }
 }
 
-function downvoting(post_id){
-  if (getUserLoggedIn()){
-    putDownvote(post_id);
-  } else {
-    window.location.href = 'http://localhost:3000/login';
-  }
-}
-
-function putUpvote(post_id){
+function putVote(post_id, type){
   let xhr = new XMLHttpRequest();
-  xhr.open('PUT', 'http://localhost:3000/posts/' + post_id + '/upvote', true);
-  xhr.setRequestHeader('Accept', 'application/json');
-  xhr.setRequestHeader('username', getUserLoggedIn());
-  xhr.send();
-  xhr.onload = (data) => {
-    let score = JSON.parse(data.target.response)[0].score;
-    let post = document.getElementById(post_id);
-    post.firstElementChild.children[1].textContent = score;
-  };
-}
-
-function putDownvote(post_id){
-  let xhr = new XMLHttpRequest();
-  xhr.open('PUT', 'http://localhost:3000/posts/' + post_id + '/downvote', true);
+  xhr.open('PUT', 'http://localhost:3000/posts/' + post_id + '/' + type + 'vote', true);
   xhr.setRequestHeader('Accept', 'application/json');
   xhr.setRequestHeader('username', getUserLoggedIn());
   xhr.send();
