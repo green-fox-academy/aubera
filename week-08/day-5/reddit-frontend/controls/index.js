@@ -13,6 +13,7 @@ function getAllPosts(what, who) {
   };
 }
 
+
 function listPosts(list) {
   let responseDataKeys = ['post_id', 'title', 'url', 'timestamp', 'score', 'owner_name', 'vote'];
   for (let i = 0; i < list.length; i++) {
@@ -24,15 +25,23 @@ function listPosts(list) {
 
     let upvote = document.createElement('div');
     let up = document.createElement('button');
-    up.setAttribute('id', 'up');
+    up.setAttribute('class', 'up');
     up.textContent = '+';
     upvote.appendChild(up);
+    up.addEventListener('click', () => {
+      //Here should change class to make upvote button color changing
+      upvoting(list[i].post_id);
+    });
 
     let downvote = document.createElement('div');
     let down = document.createElement('button');
-    down.setAttribute('id', 'down');
+    down.setAttribute('class', 'down');
     down.textContent = '-';
     downvote.appendChild(down);
+    down.addEventListener('click', () => {
+      //Here should change class to make downvote button color changing
+      downvoting(list[i].post_id);
+    });
 
     let score = document.createElement('div');
     score.textContent = list[i].score;
@@ -70,4 +79,50 @@ function checkTime(postTime, username){
     creationDate = Math.round(timeElapsedInSeconds) + ' seconds ago';
   }
   return `Submitted ${creationDate} by ${username}`;
+}
+
+function getUserLoggedIn(){
+  return sessionStorage.getItem('redditUserName');
+}
+
+function upvoting(post_id){
+  if (getUserLoggedIn()){
+    putUpvote(post_id);
+  } else {
+    window.location.href = 'http://localhost:3000/login';
+  }
+}
+
+function downvoting(post_id){
+  if (getUserLoggedIn()){
+    putDownvote(post_id);
+  } else {
+    window.location.href = 'http://localhost:3000/login';
+  }
+}
+
+function putUpvote(post_id){
+  let xhr = new XMLHttpRequest();
+  xhr.open('PUT', 'http://localhost:3000/posts/' + post_id + '/upvote', true);
+  xhr.setRequestHeader('Accept', 'application/json');
+  xhr.setRequestHeader('username', getUserLoggedIn());
+  xhr.send();
+  xhr.onload = (data) => {
+    let score = JSON.parse(data.target.response)[0].score;
+    let post = document.getElementById(post_id);
+    post.firstElementChild.children[1].textContent = score;
+  };
+}
+
+function putDownvote(post_id){
+  let xhr = new XMLHttpRequest();
+  xhr.open('PUT', 'http://localhost:3000/posts/' + post_id + '/downvote', true);
+  xhr.setRequestHeader('Accept', 'application/json');
+  xhr.setRequestHeader('username', getUserLoggedIn());
+  xhr.send();
+  xhr.onload = (data) => {
+    let score = JSON.parse(data.target.response)[0].score;
+    let post = document.getElementById(post_id);
+    post.firstElementChild.children[1].textContent = score;
+  };
 }
