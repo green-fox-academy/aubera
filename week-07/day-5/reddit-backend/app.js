@@ -17,9 +17,11 @@ let url;
 
 app.use(cors('*'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(express.static('/Users/auber.andor/greenfox/aubera/week-08/day-5/reddit-frontend/public'));
 
 app.get('/', (req, res) => {
-  res.send('hello world!');
+  res.sendFile('/Users/auber.andor/greenfox/aubera/week-08/day-5/reddit-frontend/public/views/index.html');
 });
 
 app.get('/posts', (req, res) => {
@@ -310,6 +312,65 @@ app.put('/posts/:id', (req, res) => {
           successMsg = 'Post updated in database';
           queryDBNoResponse(queryText, successMsg);
           getSelectedPostForUser(userName, post_id, statCode, successMsg, res);
+        }
+      }
+    }
+  );
+});
+
+app.get('/login', (req, res) => {
+  res.status(200).sendFile('/Users/auber.andor/greenfox/aubera/week-08/day-5/reddit-frontend/public/views/login.html');
+});
+
+app.post('/login', (req, res) => {
+  let {username, password} = req.headers;
+  connection.query(`SELECT user_name FROM users WHERE user_name = '${username}';`,
+    function(error, rows) {
+      if (error) {
+        console.log(error.toString());
+        res.status(500).send('Database error');
+        return;
+      } else {
+        if (rows.length === 0){
+          connection.query(`INSERT INTO users (user_name, password) VALUES ('${username}', '${password}');`,
+            function(error){
+              if (error) {
+                console.log(error.toString());
+                res.status(500).send('Database error');
+                return;
+              } else {
+                connection.query(`SELECT user_name FROM users WHERE user_name = '${username}'`,
+                  function(error, rows){
+                    if (error) {
+                      console.log(error.toString());
+                      res.status(500).send('Database error');
+                      return;
+                    } else {
+                      res.status(201).json(rows);
+                    }
+                  }
+                );
+              }
+            }
+          );
+        } else {
+          connection.query(`SELECT password FROM users WHERE user_name = '${username}';`,
+            function(error, rows) {
+              if (error) {
+                console.log(error.toString());
+                res.status(500).send('Database error');
+                return;
+              } else {
+                console.log(rows[0].password);
+                if (password != rows[0].password){
+                  res.status(401).send('Bad password');
+                  return;
+                } else {
+                  res.status(200).json({username: username});
+                }
+              }
+            }
+          );
         }
       }
     }
