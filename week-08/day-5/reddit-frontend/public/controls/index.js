@@ -1,6 +1,6 @@
 const posts = document.querySelector(".posts");
 
-window.onload = getAllPosts('posts/', 'feri');
+window.onload = getAllPosts('posts/', getUserLoggedIn());
 
 function getAllPosts(what, who) {
   let xhr = new XMLHttpRequest();
@@ -30,7 +30,7 @@ function listPosts(list) {
     upvote.appendChild(up);
     up.addEventListener('click', () => {
       //Here should change class to make upvote button color changing
-      changeVoting(list[i].post_id, 'up');
+      putVote(list[i].post_id, 'up');
     });
 
     let downvote = document.createElement('div');
@@ -40,7 +40,7 @@ function listPosts(list) {
     downvote.appendChild(down);
     down.addEventListener('click', () => {
       //Here should change class to make downvote button color changing
-      changeVoting(list[i].post_id, 'down');
+      putVote(list[i].post_id, 'down');
     });
 
     let score = document.createElement('div');
@@ -85,24 +85,19 @@ function getUserLoggedIn(){
   return sessionStorage.getItem('redditUserName');
 }
 
-function changeVoting(post_id, type){
+function putVote(post_id, type){
   if (getUserLoggedIn()){
-    console.log(type);
-    type === 'up' ? putVote(post_id, 'up') : putVote(post_id, 'down');
+    let xhr = new XMLHttpRequest();
+    xhr.open('PUT', 'http://localhost:3000/posts/' + post_id + '/' + type + 'vote', true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.setRequestHeader('username', getUserLoggedIn());
+    xhr.send();
+    xhr.onload = (data) => {
+      let score = JSON.parse(data.target.response)[0].score;
+      let post = document.getElementById(post_id);
+      post.firstElementChild.children[1].textContent = score;
+    };
   } else {
     window.location.href = 'http://localhost:3000/login';
   }
-}
-
-function putVote(post_id, type){
-  let xhr = new XMLHttpRequest();
-  xhr.open('PUT', 'http://localhost:3000/posts/' + post_id + '/' + type + 'vote', true);
-  xhr.setRequestHeader('Accept', 'application/json');
-  xhr.setRequestHeader('username', getUserLoggedIn());
-  xhr.send();
-  xhr.onload = (data) => {
-    let score = JSON.parse(data.target.response)[0].score;
-    let post = document.getElementById(post_id);
-    post.firstElementChild.children[1].textContent = score;
-  };
 }
