@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Log In to Reddit</title>
-  </head>
-  <body>
-    <div class="container">
-      <form action="http://localhost:3000/login" method="post">
-        <label for="username">Username</label><br>
-        <input type="text" name="username" placeholder=""><br>
-        <label for="password">Password</label><br>
-        <input type="password" name="password" placeholder=""><br>
-        <p></p><br>
-        <button type="submit" name="submit">Submit</button>
-      </form>
-    </div>
-    <script src="../controls/login.js" type="text/javascript" charset="utf-8"></script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Log In to Reddit</title>
+  <link rel="stylesheet" href="/views/login.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="login">
+    <legend>ACCOUNT LOGIN</legend>
+    <form action="http://localhost:3000/login" method="post">
+      <label for="username">USERNAME</label>
+      <input type="text" name="username" autofocus autocomplete="off">
+      <label for="password">PASSWORD</label>
+      <div class="pass">
+        <input class="password" type="password" name="password" autocomplete="off">
+        <i toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></i>
+      </div>
+      <p>Forgot password?</p>
+      <button type="submit" name="Login">Login</button>
+    </form>
+  </div>
+  <script src="../controls/login.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript">
+    document.querySelector(".toggle-password").addEventListener('click', e => {
+      console.log('siker');
+      if (e.target.classList.contains('fa-eye')) {
+        e.target.classList.remove('fa-eye');
+        e.target.classList.add('fa-eye-slash');
+      } else {
+        e.target.classList.remove('fa-eye-slash');
+        e.target.classList.add('fa-eye');
+      }
+      let input = document.querySelector('.password');
+      if (input.getAttribute('type') == 'password') {
+        input.setAttribute('type', 'text');
+      } else {
+        input.setAttribute('type', 'password');
+      }
+    });
+  </script>
+</body>
+
 </html>
