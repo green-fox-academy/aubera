@@ -17,8 +17,8 @@ function checkLoginData() {
   xhr.setRequestHeader('password', password.value);
   xhr.send();
   xhr.onload = (data) => {
-    console.log(xhr.status);
-    sessionStorage.setItem('redditUserName', JSON.parse(data.target.response).username);
+    // console.log(xhr.status);
+    sessionStorage.setItem('redditUserName', JSON.parse(data.target.response)[0].user_name);
     window.location.href = 'http://localhost:3000/';
   };
 }
