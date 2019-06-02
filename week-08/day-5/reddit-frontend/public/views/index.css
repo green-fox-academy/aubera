@@ -1,0 +1,166 @@
+body {
+  background-color: #D3D3D3;
+  margin: 0;
+  padding: 0;
+}
+
+.head {
+  background-image: url('/assets/space.jpg');
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 30vh;
+  width: 100vw;
+}
+
+.head > p {
+  color: #f6f6f6;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 3rem;
+  float: right;
+  letter-spacing: 3rem;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  right: 15%;
+  text-align: left;
+  top: 37%;
+}
+
+.container {
+  display: flex;
+}
+
+.posts {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 2%;
+  min-width: 600px;
+  width: 70%;
+}
+
+.post {
+  align-items: center;
+  background-color: #e9e9e9;
+  border-radius: 5px;
+  display: flex;
+  height: 85px;
+  justify-content: space-between;
+  margin: 1%;
+  width: 90%;
+}
+
+.post .options {
+  display: flex;
+  width: 20%;
+}
+
+.options > div {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 25px;
+  width: 45%;
+}
+
+.post .content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.post .voting {
+  align-items: center;
+  background-color: #fff;
+  border-radius: 5px 0 0 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  width: 5%;
+}
+
+.voting > div {
+  background-position: center;
+  background-repeat: no-repeat;
+  font-size: 1.2rem;
+  height: 30%;
+  line-height: 1.6rem;
+  text-align: center;
+  width: 90%;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2%;
+  width: 30%;
+}
+
+.actions > button {
+  background-color: #60a2da;
+  border: 0;
+  border-radius: 1px;
+  color: #fff;
+  font-size: 1rem;
+  height: 40px;
+  letter-spacing: .25rem;
+  width: 95%;
+  word-spacing: .5rem;
+}
+
+.actions > button:hover {
+  filter: brightness(110%);
+}
+
+.actions > button:focus {
+  outline: none;
+}
+
+.actions > button:active {
+  filter: brightness(90%);
+}
+
+.add-post {
+  background-color: #f9f9f9;
+  border-radius: 1px;
+  display: none;
+  height: 200px;
+  margin: 1%;
+  transition: 1s;
+  width: 95%;
+}
+
+.add-post > form {
+  margin: 2%;
+  padding-top: 1%;
+}
+
+.add-post label, input, button {
+  margin: 2%;
+}
+
+.add-post input {
+  font-size: 1.2rem;
+  height: 30px;
+  width: 95%;
+}
+
+.add-post label {
+  font-size: 1rem;
+  letter-spacing: .1rem;
+}
+
+.add-post button {
+  background-color: #60a2da;
+  border: 0;
+  border-radius: 1px;
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: .2rem;
+  height: 30px;
+}
+
