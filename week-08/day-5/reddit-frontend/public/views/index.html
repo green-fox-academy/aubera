@@ -3,9 +3,28 @@
   <head>
     <meta charset="utf-8">
     <title>Reddit Clone</title>
+    <link rel="stylesheet" href="/views/index.css">
+    <link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div class="posts">
+    <div class="head">
+      <p>SPACE</p>
+    </div>
+    <div class="container">
+      <div class="posts">
+      </div>
+      <div class="actions">
+        <button class="submit" type="button">SUBMIT A NEW POST</button>
+        <div class="add-post">
+          <form class="new-post" action="http://localhost:3000/posts" method="post">
+            <label for="title">TITLE</label><br>
+            <input type="text" name="title" required><br>
+            <label for="url">URL</label><br>
+            <input type="url" name="url" required><br>
+            <button type="submit" name="submit">SUBMIT</button>
+          </form>
+        </div>
+      </div>
     </div>
     <script src="../controls/index.js" charset="utf-8"></script>
   </body>
