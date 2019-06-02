@@ -1,0 +1,86 @@
+body {
+  background-image: url('/assets/space.jpg');
+  background-position: center;
+  background-size: 150%;
+  background-repeat: no-repeat;
+  color: #222831;
+  display: flex;
+  font-family: 'Lato', sans-serif;
+  font-weight: 600;
+  justify-content: center;
+}
+
+body div {
+  background-color: #eee;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  height: 20%;
+  margin-top: 150px;
+  padding: 2%;
+  width: 30%;
+}
+
+form {
+  margin: 0 10%;
+}
+
+label, input{
+  font-size: 1rem;
+  margin: 0;
+}
+
+legend {
+  font-size: 1.4rem;
+  margin: 3% auto 15%;
+}
+
+input {
+  border-radius: 5px;
+  border: 1px solid #e6e6e6;
+  font-size: 1.3rem;
+  height: 35px;
+  padding: 1% 3%;
+  margin: 2% 0;
+  width: 100%;
+}
+
+form div {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+button {
+  background-color: #222831;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 1rem;
+  margin: 15% auto 5%;
+  padding: 5% 15%;
+}
+
+input:focus {
+  border-color: #d65a31;
+  outline-style: none;
+}
+
+p {
+  color: #d65a31;
+  float: right;
+  font-size: 0.7rem;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+i {
+  float: left;
+  bottom: 37px;
+  left: 330px;
+  position: relative;
+}
