@@ -47,6 +47,7 @@ app.get('/posts', (req, res) => {
 app.post('/posts', (req, res) => {
   title = req.body.title;
   url = req.body.url;
+  console.log(req.body);
   userName = req.headers.username;
   connection.query(`SELECT user_name FROM users WHERE user_name = '${userName}';`,
     function(error, rows) {
@@ -69,16 +70,6 @@ app.post('/posts', (req, res) => {
               res.status(500).send('Database error, not imported');
               return;
             } else {
-              connection.query(`INSERT INTO users (user_name) VALUES ('${userName}');`,
-                function(err, rows) {
-                  if (err) {
-                    console.log(err.toString());
-                    res.status(500).send('Database error');
-                    return;
-                  }
-                  console.log('User added to database');
-                }
-              );
               connection.query(`SELECT  p1.post_id, p1.title, p1.url, unix_timestamp(p1.timestamp) AS 'timestamp', CASE WHEN (SELECT SUM(vote) ` +
                 `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) IS NOT NULL THEN (SELECT SUM(vote) ` +
                 `FROM votes WHERE post_id = p1.post_id GROUP BY post_id) ELSE 0 END AS score, ` +
@@ -361,12 +352,11 @@ app.post('/login', (req, res) => {
                 res.status(500).send('Database error');
                 return;
               } else {
-                console.log(rows[0].password);
                 if (password != rows[0].password){
                   res.status(401).send('Bad password');
                   return;
                 } else {
-                  res.status(200).json({username: username});
+                  res.status(200).json([{user_name: username}]);
                 }
               }
             }
