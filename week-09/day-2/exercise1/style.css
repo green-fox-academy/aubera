@@ -1,0 +1,22 @@
+body {
+  color: #fff;
+  background-color: #a145f6;
+  display: grid;
+  grid-template-columns: 1fr 60% 1fr;
+  grid-gap: 10px;
+  text-align: center;
+}
+
+div {
+  font-size: 2rem;
+  height: 200px;
+  line-height: 200px;
+}
+
+.side {
+  background-color: #f9d651;
+}
+
+.middle {
+  background-color: #77cf3e;
+}
