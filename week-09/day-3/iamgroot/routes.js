@@ -168,4 +168,12 @@ app.patch('/awesome', (req, res) => {
     .catch(error => res.status(500).send('Server error'));
 });
 
+app.get('/awesome/fav/:top', (req, res) => {
+  let top = req.params.top;
+  let getTopXFavoriteTracksFromAwesomeMix = `SELECT * FROM AwesomeMix ORDER BY rating DESC LIMIT ${top};`;
+  makeSQLQuery(getTopXFavoriteTracksFromAwesomeMix)
+    .then(data => res.status(200).json(data))
+    .catch(error => res.status(500).send('Server error'));
+});
+
 module.exports = app;
