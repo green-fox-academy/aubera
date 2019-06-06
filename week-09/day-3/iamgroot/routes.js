@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const { connection, makeSQLQuery } = require('./mysql');
 const app = express();
 
 let ship = {
@@ -9,6 +11,8 @@ let ship = {
   "ready": false
 };
 let maxAmmo = 12500;
+
+app.use(bodyParser.json());
 
 app.get('/groot/', (req, res) => {
   let translate = {};
@@ -86,4 +90,44 @@ app.get('/rocket/fill', (req, res) => {
   }
 });
 
+app.get('/drax', (req, res) => {
+  let getAllCalorieItemsSQL = `SELECT * FROM DraxCalorie;`;
+  makeSQLQuery(getAllCalorieItemsSQL)
+    .then(data => res.status(200).json(data))
+    .catch(error => res.status(500).send('Server error'));
+});
+
+app.post('/drax', (req, res) => {
+  let {name, amount, calorie} = req.body;
+  let addNewItemToCalorieTableSQL = `INSERT INTO DraxCalorie (name, amount, calorie) VALUES ('${name}', ${amount}, ${calorie});`;
+  let lastItemFromCalorieTableSQL = `SELECT * FROM DraxCalorie ORDER BY id DESC LIMIT 1`;
+  makeSQLQuery(addNewItemToCalorieTableSQL)
+    .then(data => makeSQLQuery(lastItemFromCalorieTableSQL))
+    .then(data => res.status(201).json(data))
+    .catch(error => res.status(500).send('Server error'));
+});
+
+app.delete('/drax', (req, res) => {
+  let {id} = req.body;
+  let getSpecificItemFromCalorieTableSQL = `SELECT * FROM DraxCalorie WHERE id = ${id};`;
+  let deleteSpecificItemFromCalorieTable = `DELETE FROM DraxCalorie WHERE id = ${id};`;
+  let itemToDelete;
+  makeSQLQuery(getSpecificItemFromCalorieTableSQL)
+    .then(data => itemToDelete = data)
+    .then(makeSQLQuery(deleteSpecificItemFromCalorieTable))
+    .then(data => res.status(200).json(itemToDelete))
+    .catch(error => res.status(500).send('Server error'));
+});
+
+app.patch('/drax', (req, res) => {
+  let {id, amount} = req.body;
+  let updateSpecificItemAmountInCalorieTable = `UPDATE DraxCalorie SET amount = ${amount} WHERE id = ${id};`;
+  let getSpecificItemFromCalorieTableSQL = `SELECT * FROM DraxCalorie WHERE id = ${id};`;
+  makeSQLQuery(updateSpecificItemAmountInCalorieTable)
+    .then(data => makeSQLQuery(getSpecificItemFromCalorieTableSQL))
+    .then(data => res.status(201).json(data))
+    .catch(error => res.status(500).send('Server error'));
+});
+
 module.exports = app;
+
