@@ -595,7 +595,7 @@ test('awesome endpoint get the favorite 5 tracks', (t) => {
 
 test('awesome endpoint get track from specific genre', (t) => {
   request(app)
-    .get('/awesome/?genre=pop')
+    .get('/awesome/search?genre=pop')
     .expect(200)
     .expect('Content-type', /json/)
     .end((err, res) => {
@@ -642,7 +642,7 @@ test('awesome endpoint get track from specific genre', (t) => {
 
 test('awesome endpoint get track from specific author', (t) => {
   request(app)
-    .get('/awesome/?author=Raspberries')
+    .get('/awesome/search?author=Raspberries')
     .expect(200)
     .expect('Content-type', /json/)
     .end((err, res) => {
@@ -674,7 +674,7 @@ test('awesome endpoint get track from specific author', (t) => {
 
 test('awesome endpoint get track from specific year', (t) => {
   request(app)
-    .get('/awesome/?year=1969')
+    .get('/awesome/search?year=1969')
     .expect(200)
     .expect('Content-type', /json/)
     .end((err, res) => {
