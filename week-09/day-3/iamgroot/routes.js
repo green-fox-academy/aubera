@@ -145,5 +145,17 @@ app.post('/awesome', (req, res) => {
     .then(data => res.status(201).json(data))
     .catch(error => res.status(500).send('Server error'));
 });
-module.exports = app;
 
+app.delete('/awesome', (req, res) => {
+  let {id} = req.body;
+  let getSpecificItemFromAwesomeMixSQL = `SELECT * FROM AwesomeMix WHERE id = ${id};`;
+  let deleteSpecificItemFromAwesomeMix = `DELETE FROM AwesomeMix WHERE id = ${id};`;
+  let itemToDelete;
+  makeSQLQuery(getSpecificItemFromAwesomeMixSQL)
+    .then(data => itemToDelete = data)
+    .then(data => makeSQLQuery(deleteSpecificItemFromAwesomeMix))
+    .then(data => res.status(200).json(itemToDelete))
+    .catch(error => res.status(500).send('Server error'));
+});
+
+module.exports = app;
