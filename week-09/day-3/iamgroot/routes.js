@@ -129,5 +129,21 @@ app.patch('/drax', (req, res) => {
     .catch(error => res.status(500).send('Server error'));
 });
 
+app.get('/awesome', (req, res) => {
+  let getAllAwesomeMixTracksFromSQL = 'SELECT * FROM AwesomeMix;';
+  makeSQLQuery(getAllAwesomeMixTracksFromSQL)
+    .then(data => res.status(200).json(data))
+    .catch(error => res.status(500).send('Server error'));
+});
+
+app.post('/awesome', (req, res) => {
+  let {author, title, genre, year, rating} = req.body;
+  let addNewAwesomeTrackSQL = `INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("${author}", "${title}", "${genre}", ${year}, ${rating});`;
+  let lastItemFromAwesomeMixSQL = `SELECT * FROM AwesomeMix ORDER BY id DESC LIMIT 1;`;
+  makeSQLQuery(addNewAwesomeTrackSQL)
+    .then(data => makeSQLQuery(lastItemFromAwesomeMixSQL))
+    .then(data => res.status(201).json(data))
+    .catch(error => res.status(500).send('Server error'));
+});
 module.exports = app;
 
