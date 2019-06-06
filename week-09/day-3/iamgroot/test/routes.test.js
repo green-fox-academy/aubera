@@ -485,10 +485,7 @@ test('awesome endpoint update an awesome track', (t) => {
 
 test('awesome endpoint get the favorite 3 tracks', (t) => {
   request(app)
-    .get('/awesome/fav')
-    .send({
-      'amount': 3
-    })
+    .get('/awesome/fav/3')
     .expect(200)
     .expect('Content-type', /json/)
     .end((err, res) => {
@@ -535,10 +532,7 @@ test('awesome endpoint get the favorite 3 tracks', (t) => {
 
 test('awesome endpoint get the favorite 5 tracks', (t) => {
   request(app)
-    .get('/awesome/fav')
-    .send({
-      'amount': 5
-    })
+    .get('/awesome/fav/5')
     .expect(200)
     .expect('Content-type', /json/)
     .end((err, res) => {
@@ -595,7 +589,126 @@ test('awesome endpoint get the favorite 5 tracks', (t) => {
         .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("David Bowie", "Moonage Daydream", "rock", 1971, 2);'))
         .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("The Jackson 5", "I Want You Back", "pop", 1969, 4);'))
         .catch(error => console.log(error));
-      closeConnection();
+      t.end();
+    });
+});
+
+test('awesome endpoint get track from specific genre', (t) => {
+  request(app)
+    .get('/awesome/?genre=pop')
+    .expect(200)
+    .expect('Content-type', /json/)
+    .end((err, res) => {
+      const expected = [{
+          "id": 1,
+          "author": "Blue Swede",
+          "title": "Hooked on a Feeling",
+          "genre": "pop",
+          "year": 1968,
+          "rating": 3
+        },
+        {
+          "id": 2,
+          "author": "Raspberries",
+          "title": "Go All the Way",
+          "genre": "pop",
+          "year": 1972,
+          "rating": 1
+        },
+        {
+          "id": 5,
+          "author": "The Jackson 5",
+          "title": "I Want You Back",
+          "genre": "pop",
+          "year": 1969,
+          "rating": 4
+        }
+      ];
+      const actual = res.body;
+
+      t.error(err, 'No error');
+      t.same(actual, expected, 'Received expected answer');
+      makeSQLQuery('DROP TABLE AwesomeMix;')
+        .then(makeSQLQuery('CREATE TABLE AwesomeMix(id INT(2) NOT NULL PRIMARY KEY AUTO_INCREMENT, author CHAR(255), title CHAR(255), genre CHAR(255), year INT(4), rating INT(1));'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Blue Swede", "Hooked on a Feeling", "pop", 1968, 3);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Raspberries", "Go All the Way", "pop", 1972, 1);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Norman Greenbaum", "Spirit in the Sky", "rock", 1969, 5);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("David Bowie", "Moonage Daydream", "rock", 1971, 2);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("The Jackson 5", "I Want You Back", "pop", 1969, 4);'))
+        .catch(error => console.log(error));
+      t.end();
+    });
+});
+
+test('awesome endpoint get track from specific author', (t) => {
+  request(app)
+    .get('/awesome/?author=Raspberries')
+    .expect(200)
+    .expect('Content-type', /json/)
+    .end((err, res) => {
+      const expected = [
+        {
+          "id": 2,
+          "author": "Raspberries",
+          "title": "Go All the Way",
+          "genre": "pop",
+          "year": 1972,
+          "rating": 1
+        }
+      ];
+      const actual = res.body;
+
+      t.error(err, 'No error');
+      t.same(actual, expected, 'Received expected answer');
+      makeSQLQuery('DROP TABLE AwesomeMix;')
+        .then(makeSQLQuery('CREATE TABLE AwesomeMix(id INT(2) NOT NULL PRIMARY KEY AUTO_INCREMENT, author CHAR(255), title CHAR(255), genre CHAR(255), year INT(4), rating INT(1));'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Blue Swede", "Hooked on a Feeling", "pop", 1968, 3);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Raspberries", "Go All the Way", "pop", 1972, 1);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Norman Greenbaum", "Spirit in the Sky", "rock", 1969, 5);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("David Bowie", "Moonage Daydream", "rock", 1971, 2);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("The Jackson 5", "I Want You Back", "pop", 1969, 4);'))
+        .catch(error => console.log(error));
+      t.end();
+    });
+});
+
+test('awesome endpoint get track from specific year', (t) => {
+  request(app)
+    .get('/awesome/?year=1969')
+    .expect(200)
+    .expect('Content-type', /json/)
+    .end((err, res) => {
+      const expected = [
+        {
+            "id": 3,
+            "author": "Norman Greenbaum",
+            "title": "Spirit in the Sky",
+            "genre": "rock",
+            "year": 1969,
+            "rating": 5
+          },
+          {
+            "id": 5,
+            "author": "The Jackson 5",
+            "title": "I Want You Back",
+            "genre": "pop",
+            "year": 1969,
+            "rating": 4
+          },
+      ];
+      const actual = res.body;
+
+      t.error(err, 'No error');
+      t.same(actual, expected, 'Received expected answer');
+      makeSQLQuery('DROP TABLE AwesomeMix;')
+        .then(makeSQLQuery('CREATE TABLE AwesomeMix(id INT(2) NOT NULL PRIMARY KEY AUTO_INCREMENT, author CHAR(255), title CHAR(255), genre CHAR(255), year INT(4), rating INT(1));'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Blue Swede", "Hooked on a Feeling", "pop", 1968, 3);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Raspberries", "Go All the Way", "pop", 1972, 1);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Norman Greenbaum", "Spirit in the Sky", "rock", 1969, 5);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("David Bowie", "Moonage Daydream", "rock", 1971, 2);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("The Jackson 5", "I Want You Back", "pop", 1969, 4);'))
+        .catch(error => console.log(error));
+        closeConnection();
       t.end();
     });
 });
