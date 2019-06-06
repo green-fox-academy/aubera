@@ -176,4 +176,16 @@ app.get('/awesome/fav/:top', (req, res) => {
     .catch(error => res.status(500).send('Server error'));
 });
 
+app.get('/awesome/search', (req, res) => {
+  let {author, genre, year} = req.query;
+  let columnName;
+  let query;
+  author ? columnName = 'author' : genre ? columnName = 'genre' : columnName = 'year';
+  columnName === 'author' ? query = author : columnName === 'genre' ? query = genre : query = year;
+  let getSpecificDataForQueryFromAwesomeMix = `SELECT * FROM AwesomeMix WHERE ${columnName} = "${query}";`;
+  makeSQLQuery(getSpecificDataForQueryFromAwesomeMix)
+    .then(data => res.status(200).json(data))
+    .catch(error => res.status(500).send('Server error'));
+});
+
 module.exports = app;
