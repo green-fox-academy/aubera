@@ -412,7 +412,40 @@ test('awesome endpoint post new awesome track', (t) => {
         .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("David Bowie", "Moonage Daydream", "rock", 1971, 2);'))
         .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("The Jackson 5", "I Want You Back", "pop", 1969, 4);'))
         .catch(error => console.log(error));
-      closeConnection();
+      t.end();
+    });
+});
+
+test('awesome endpoint delete an awesome track', (t) => {
+  request(app)
+    .delete('/awesome')
+    .send({
+      'id': 4
+    })
+    .expect(200)
+    .expect('Content-type', /json/)
+    .end((err, res) => {
+      const expected = [{
+        "id": 4,
+        "author": "David Bowie",
+        "title": "Moonage Daydream",
+        "genre": "rock",
+        "year": 1971,
+        "rating": 2
+      }];
+      const actual = res.body;
+
+      t.error(err, 'No error');
+      t.same(actual, expected, 'Received expected answer');
+      makeSQLQuery('DROP TABLE AwesomeMix;')
+        .then(makeSQLQuery('CREATE TABLE AwesomeMix(id INT(2) NOT NULL PRIMARY KEY AUTO_INCREMENT, author CHAR(255), title CHAR(255), genre CHAR(255), year INT(4), rating INT(1));'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Blue Swede", "Hooked on a Feeling", "pop", 1968, 3);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Raspberries", "Go All the Way", "pop", 1972, 1);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("Norman Greenbaum", "Spirit in the Sky", "rock", 1969, 5);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("David Bowie", "Moonage Daydream", "rock", 1971, 2);'))
+        .then(makeSQLQuery('INSERT INTO AwesomeMix (author, title, genre, year, rating) VALUES ("The Jackson 5", "I Want You Back", "pop", 1969, 4);'))
+        .catch(error => console.log(error));
+        closeConnection();
       t.end();
     });
 });
