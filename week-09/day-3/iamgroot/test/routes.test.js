@@ -1,6 +1,7 @@
 const test = require('tape');
 const request = require('supertest');
 const app = require('../routes');
+const { connection, closeConnection, makeSQLQuery } = require('../mysql');
 
 test('groot endpoint with message', (t) => {
   const message = 'testing';
@@ -203,12 +204,120 @@ test('rocket endpoint no input data', (t) => {
     .expect(400)
     .end((err, res) => {
       const expected = {
-        "message" : 'Give me valid data!'
+        "message": 'Give me valid data!'
       };
       const actual = res.body;
 
       t.error(err, 'No error');
       t.same(actual, expected, 'Received expected answer');
+      t.end();
+    });
+});
+
+test('drax endpoint get all calories data', (t) => {
+  request(app)
+    .get(`/drax`)
+    .expect('Content-type', /json/)
+    .expect(200)
+    .end((err, res) => {
+      const expected = [{
+          "name": "lecso",
+          "amount": 2,
+          "calorie": 6000,
+          "id": 1
+        }
+      ];
+      const actual = res.body;
+
+      t.error(err, 'No error :)');
+      t.same(actual, expected, 'Received expected answer');
+      t.end();
+    });
+});
+
+test('drax endpoint post new calorie data', (t) => {
+  request(app)
+    .post(`/drax`)
+    .send({
+      name: 'rantotta',
+      amount: 1,
+      calorie: 2000
+    })
+    .expect('Content-type', /json/)
+    .expect(201)
+    .end((err, res) => {
+      const expected = [{
+        "name": "rantotta",
+        "amount": 1,
+        "calorie": 2000,
+        "id": 2
+      }];
+      const actual = res.body;
+
+      t.error(err, 'No error :)');
+      t.same(actual, expected, 'Received expected answer');
+      makeSQLQuery('DROP TABLE DraxCalorie;')
+        .then(makeSQLQuery('CREATE TABLE DraxCalorie(name CHAR(255), amount INT(255), calorie INT(255), id INT(255) AUTO_INCREMENT PRIMARY KEY NOT NULL);'))
+        .then(makeSQLQuery('INSERT INTO DraxCalorie (name, amount, calorie) VALUES ("lecso", 2, 6000);'))
+        .catch(error => console.log(error));
+      t.end();
+    });
+});
+
+test('drax endpoint delete calorie data', (t) => {
+  request(app)
+    .delete(`/drax`)
+    .send({
+      id: 1
+    })
+    .expect(200)
+    .expect('Content-type', /json/)
+    .end((err, res) => {
+      const expected = [{
+        name: 'lecso',
+        amount: 2,
+        calorie: 6000,
+        id: 1
+      }];
+      const actual = res.body;
+
+      t.error(err, 'No error');
+      t.same(actual, expected, 'Received expected answer');
+
+      makeSQLQuery('DROP TABLE DraxCalorie;')
+        .then(makeSQLQuery('CREATE TABLE DraxCalorie(name CHAR(255), amount INT(255), calorie INT(255), id INT(255) AUTO_INCREMENT PRIMARY KEY NOT NULL);'))
+        .then(makeSQLQuery('INSERT INTO DraxCalorie (name, amount, calorie) VALUES ("lecso", 2, 6000);'))
+        .catch(error => console.log(error));
+      t.end();
+    });
+});
+
+test('drax endpoint update calorie data amount', (t) => {
+  request(app)
+    .patch(`/drax`)
+    .send({
+      id: 1,
+      amount: 3
+    })
+    .expect(201)
+    .expect('Content-type', /json/)
+    .end((err, res) => {
+      const expected = [{
+        name: 'lecso',
+        amount: 3,
+        calorie: 6000,
+        id: 1
+      }];
+      const actual = res.body;
+
+      t.error(err, 'No error');
+      t.same(actual, expected, 'Received expected answer');
+
+      makeSQLQuery('DROP TABLE DraxCalorie;')
+        .then(makeSQLQuery('CREATE TABLE DraxCalorie(name CHAR(255), amount INT(255), calorie INT(255), id INT(255) AUTO_INCREMENT PRIMARY KEY NOT NULL);'))
+        .then(makeSQLQuery('INSERT INTO DraxCalorie (name, amount, calorie) VALUES ("lecso", 2, 6000);'))
+        .catch(error => console.log(error));
+      closeConnection();
       t.end();
     });
 });
