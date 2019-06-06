@@ -158,4 +158,14 @@ app.delete('/awesome', (req, res) => {
     .catch(error => res.status(500).send('Server error'));
 });
 
+app.patch('/awesome', (req, res) => {
+  let {id, rating} = req.body;
+  let updateSpecificItemFromAwesomeMixSQL = `UPDATE AwesomeMix SET rating = ${rating} WHERE id = ${id};`;
+  let getSpecificItemFromAwesomeMixSQL = `SELECT * FROM AwesomeMix WHERE id = ${id};`;
+  makeSQLQuery(updateSpecificItemFromAwesomeMixSQL)
+    .then(data => makeSQLQuery(getSpecificItemFromAwesomeMixSQL))
+    .then(data => res.status(201).json(data))
+    .catch(error => res.status(500).send('Server error'));
+});
+
 module.exports = app;
